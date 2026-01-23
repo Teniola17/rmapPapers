@@ -103,40 +103,15 @@ fit_cur <- mod_cur$sample(
 fit_cur$summary()
 
 
-#### Robust version
-
-
-w_robust <- 0.5           
-mu_vague <- 0
-sd_vague <- 20
-
-robust_weights <- c(
-  w_robust * weight,
-  1 - w_robust
-)
-
-robust_mu <- c(
-  means,
-  mu_vague
-)
-
-robust_sigma <- c(
-  sds,
-  sd_vague
-)
-
-robust_map <- list(
-  K = length(robust_weights),
-  weights = robust_weights,
-  mu = robust_mu,
-  sigma = robust_sigma
-)
+#### Robust version ##########################################
 
 
 
+robus <- robustify(mix, weight=0.8, mean=0, sigma=10)
 
-#######   with PS
+rob_w <- robus["w",]
+rob_m <- robus["m",]
+rob_s <- robus["s",]
+k <- length(rob_w)
 
 
-mix_alpha <- automixfit(theta_new_draws[,1])
-mix_gamma <- automixfit(theta_new_draws[,2])
