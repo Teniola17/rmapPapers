@@ -107,7 +107,7 @@ fit_cur$summary()
 
 
 
-robus <- robustify(mix, weight=0.8, mean=0, sigma=10)
+robus <- robustify(mix, weight=0.2, mean=0, sigma=10)
 
 rob_w <- robus["w",]
 rob_m <- robus["m",]
@@ -115,3 +115,25 @@ rob_s <- robus["s",]
 k <- length(rob_w)
 
 
+data_curr <- list(
+  N = N_cur,
+  y = y_cur,
+  trt = trt,
+  x = x_cur,
+  K = k,
+  weights = rob_w,
+  mu = rob_m,
+  sigma_prior = rob_s
+)
+
+mod_rob_cur <- cmdstan_model("rmap_curdat.stan")
+
+fit_cur_rob <- mod_rob_cur$sample(
+  data = data_curr,
+  chains = 4,
+  iter_warmup = 1000,
+  iter_sampling = 2000,
+  seed = 456
+)
+
+fit_cur_rob$summary()

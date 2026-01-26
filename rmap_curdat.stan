@@ -41,3 +41,4 @@ generated quantities {
   real mu_placebo = alpha;
   real mu_treatment = alpha + beta;
 }
+
