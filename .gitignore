@@ -2,5 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
-.map_prior.exe
-.new_trial_map.exe
+map_prior.exe
+new_trial_map.exe
+borrowing_on_ps.exe
+current_trial_with_ps.exe
+map_prior_raw2.exe

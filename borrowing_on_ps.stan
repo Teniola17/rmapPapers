@@ -1,7 +1,7 @@
 data {
   int<lower=1> N;
   int<lower=1> J;
-  int<lower=1,upper=J> trial[N];
+  array[N] int<lower=1, upper=J> trial;
   vector[N] y;
   vector[N] x;   // centered
 }

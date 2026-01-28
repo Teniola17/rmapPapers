@@ -48,3 +48,5 @@ model {
   y ~ normal(alpha + beta .* trt + gamma .* x, sigma_y);
 }
 
+
+

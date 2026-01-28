@@ -106,8 +106,7 @@ fit_cur$summary()
 #### Robust version ##########################################
 
 
-
-robus <- robustify(mix, weight=0.2, mean=0, sigma=10)
+robus <- robustify(mix, weight=0.8, mean=0, sigma=10)
 
 rob_w <- robus["w",]
 rob_m <- robus["m",]
@@ -123,12 +122,12 @@ data_curr <- list(
   K = k,
   weights = rob_w,
   mu = rob_m,
-  sigma_prior = rob_s
+  sigma = rob_s
 )
 
-mod_rob_cur <- cmdstan_model("rmap_curdat.stan")
+#mod_rob_cur <- cmdstan_model("rmap_curdat.stan")
 
-fit_cur_rob <- mod_rob_cur$sample(
+fit_cur_rob <- mod_cur$sample(
   data = data_curr,
   chains = 4,
   iter_warmup = 1000,
@@ -137,3 +136,120 @@ fit_cur_rob <- mod_rob_cur$sample(
 )
 
 fit_cur_rob$summary()
+
+
+
+############ for MAP prior with prognostic scores
+
+mod_ps <- cmdstan_model("borrowing_on_ps.stan")
+
+fit_hist_ps <- mod_ps$sample(
+  data = hist_data,
+  chains = 4,
+  iter_warmup = 1000,
+  iter_sampling = 2000,
+  seed = 123
+)
+
+
+fit_hist_ps$summary()
+
+theta1_draw <- fit_hist_ps$draws("theta_new[1]")|>as.numeric()
+theta2_draw <- fit_hist_ps$draws("theta_new[2]")|>as.numeric()
+
+mapize1 <- automixfit(theta1_draw, Nc=1:10)
+
+# intercept
+alpha_m <- mapize1["m",]
+alpha_s <- mapize1["s",]
+alpha_w <- mapize1["w",]
+alpha_k <- length(alpha_m)
+
+# covariate
+mapize2 <- automixfit(theta2_draw, Nc=1:10)
+beta_m <- mapize2["m",]
+beta_s <- mapize2["s",]
+beta_w <- mapize2["w",]
+beta_k <- length(beta_m)
+# Apply it to the current data
+
+mod_ps_mapcur <- cmdstan_model("current_trial_with_ps.stan")
+
+data_curr_ps <- list(
+  N = N_cur,
+  y = y_cur,
+  trt = trt,
+  x = x_cur,
+  
+  # aplha components
+  K_alpha = alpha_k,
+  mu_alpha = alpha_m,
+  sigma_alpha = alpha_s,
+  w_alpha = alpha_w,
+  
+  # gamma componets
+  K_gamma = beta_k,
+  mu_gamma = beta_m,
+  sigma_gamma = beta_s,
+  w_gamma = beta_w
+)
+
+fit_curmap_ps <- mod_ps_mapcur$sample(
+  data = data_curr_ps,
+  chains = 4,
+  iter_warmup = 1000,
+  iter_sampling = 2000,
+  seed = 123
+)
+
+
+fit_curmap_ps$summary()
+
+
+# RMAP for progstic scores
+
+rob_ps1 <- robustify(mapize1, weight=0.8, mean=0, sigma=10)
+rob_ps2 <- robustify(mapize2, weight=0.8, mean=0, sigma=10)
+
+alphar_m <- rob_ps1["m",]
+alphar_s <- rob_ps1["s",]
+alphar_w <- rob_ps1["w",]
+alphar_k <- length(alphar_m)
+
+betar_m <- rob_ps2["m",]
+betar_s <- rob_ps2["s",]
+betar_w <- rob_ps2["w",]
+betar_k <- length(betar_m)
+
+
+
+data_curr_ps2 <- list(
+  N = N_cur,
+  y = y_cur,
+  trt = trt,
+  x = x_cur,
+  
+  # aplha components
+  K_alpha = alphar_k,
+  mu_alpha = alphar_m,
+  sigma_alpha = alphar_s,
+  w_alpha = alphar_w,
+  
+  # gamma componets
+  K_gamma = betar_k,
+  mu_gamma = betar_m,
+  sigma_gamma = betar_s,
+  w_gamma = betar_w
+)
+
+
+fit_curRmap_ps <- mod_ps_mapcur$sample(
+  data = data_curr_ps2,
+  chains = 4,
+  iter_warmup = 1000,
+  iter_sampling = 2000,
+  seed = 123
+)
+
+
+fit_curRmap_ps$summary()
