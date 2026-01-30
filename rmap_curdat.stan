@@ -1,10 +1,10 @@
 data {
   int<lower=1> N;           // Number of patients in current trial
   vector[N] y;              // Continuous outcome
-  vector[N] trt;            // Treatment indicator (0 = Placebo, 1 = Treatment)
+  vector[N] trt;            // Treatment indicator 
   vector[N] x;              // Centered baseline covariate
 
-  // Robust MAP Prior parameters (Components 1 to K-1 are MAP, K is the Vague component)
+  // Robust MAP Prior parameters 
   int<lower=1> K;           
   vector<lower=0, upper=1>[K] weights; 
   vector[K] mu;
@@ -27,7 +27,7 @@ model {
   target += log_sum_exp(lps);
 
   // 2. Weakly Informative Priors for other parameters
-  beta ~ normal(0, 5);       // Adjust scale based on your outcome range
+  beta ~ normal(0, 5);       
   gamma ~ normal(0, 5);      
   sigma_y ~ cauchy(0, 2.5);
 
@@ -37,7 +37,7 @@ model {
 }
 
 generated quantities {
-  // You can calculate the predicted mean for each group here if desired
+  
   real mu_placebo = alpha;
   real mu_treatment = alpha + beta;
 }
