@@ -86,7 +86,7 @@ ggplot(current_trial, aes(x = factor(Bio_1), y = Target, fill = factor(Treatment
 
 
 
-# Helper: simulate one dataset (returns list with hist + current data frames)
+# Helper: simulate one dataset 
 simulate_one <- function(H = 5,
                          n_hist = 200,
                          n_trial = 500,
