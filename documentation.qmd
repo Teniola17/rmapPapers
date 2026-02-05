@@ -36,6 +36,7 @@ principled evaluation of borrowing and transfer-learning methods.
 
 ```{r}
 library(MASS)
+library(tidyverse)
 
 n_hist <- 200      # Patients per historical study
 n_trial <- 500     # Patients in current trial
@@ -245,7 +246,7 @@ ggplot(
 
 ```
 
-# Bayesian Borrowing technique
+# Prognostic Scores and Bayesian Borrowing techniques
 
 1.  Construction of a **prognostic score** using historical control
     data.
@@ -282,8 +283,16 @@ $$
 \mathcal{H} = \bigcup_{k=1}^K D_k^{(control)}
 $$
 
-be the pooled historical control dataset.
+be the pooled historical control dataset. The structure of the data is:
 
+```{r}
+#| message: false
+#| warning: false
+samp <- all_data %>% select(Study, Treatment, Target, Lab_1, Lab_2, Bio_1) 
+knitr::kable(samp[sample(nrow(samp), 10), ], caption = "Sample of Pooled data")
+
+```
+Please note that a representation of the features of the entire dataset is displayed in the table 1
 ------------------------------------------------------------------------
 
 # Step 1: Build the prognostic model
@@ -317,7 +326,7 @@ $$
 ## R: Fit Random Forest Prognostic Model
 
 ```{r}
-library(randomForest)
+
 
 
 ```
