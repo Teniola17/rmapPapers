@@ -99,14 +99,22 @@ simulate_one <- function(H = 5,
                     global_hist_drift = global_hist_drift)
     data.frame(Study = paste0("H", s), Treatment = Trt, Target = Y, X)
   })
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 2422643b4257915cedb6f819732ead5a8e03166f
   X_trial <- generate_x(n_trial)
   Trt_trial <- rbinom(n_trial, 1, 0.7)
   Y_trial <- generate_y(X_trial, Trt_trial,
                         study_drift = 0,
                         global_hist_drift = 0)
   current <- data.frame(Study = "Current", Treatment = Trt_trial, Target = Y_trial, X_trial)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 2422643b4257915cedb6f819732ead5a8e03166f
   list(historical = do.call(rbind, hist_list), current = current)
 }
 
@@ -119,16 +127,27 @@ ate_from_lm <- function(fit, current_df) {
   b_trt <- coefs["Treatment"]
   b_int <- if ("Treatment:Bio_1" %in% names(coefs)) coefs["Treatment:Bio_1"] else 0
   ate_hat <- b_trt + b_int * mean_bio
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 2422643b4257915cedb6f819732ead5a8e03166f
   # variance: Var(b_trt) + mean^2 Var(b_int) + 2 mean Cov(b_trt,b_int)
   var_trt <- vc["Treatment", "Treatment"]
   var_int <- if ("Treatment:Bio_1" %in% rownames(vc)) vc["Treatment:Bio_1", "Treatment:Bio_1"] else 0
   cov_trt_int <- if ("Treatment:Bio_1" %in% rownames(vc)) vc["Treatment", "Treatment:Bio_1"] else 0
   se_ate <- sqrt(var_trt + (mean_bio^2) * var_int + 2 * mean_bio * cov_trt_int)
+<<<<<<< HEAD
   
   ci_lower <- ate_hat - 1.96 * se_ate
   ci_upper <- ate_hat + 1.96 * se_ate
   
+=======
+
+  ci_lower <- ate_hat - 1.96 * se_ate
+  ci_upper <- ate_hat + 1.96 * se_ate
+
+>>>>>>> 2422643b4257915cedb6f819732ead5a8e03166f
   list(ate = ate_hat, se = se_ate, ci = c(lower = ci_lower, upper = ci_upper))
 }
 
@@ -136,6 +155,7 @@ ate_from_lm <- function(fit, current_df) {
 fit_and_eval <- function(hist_df, current_df) {
   # formula that matches data generation structure (include Bio_1 interaction)
   fm <- as.formula("Target ~ Treatment * Bio_1 + Lab_1 + Lab_2 + Lab_3 + Lab_4 + Lab_5")
+<<<<<<< HEAD
   
   # 1) Current-only
   fit_current <- lm(fm, data = current_df)
@@ -149,6 +169,21 @@ fit_and_eval <- function(hist_df, current_df) {
   
   true_ate <- mean(5 + 12 * current_df$Bio_1)
   
+=======
+
+  # 1) Current-only
+  fit_current <- lm(fm, data = current_df)
+
+  # 2) Stacked naive (hist + current)
+  stacked <- rbind(hist_df, current_df)
+  fit_stacked <- lm(fm, data = stacked)
+
+  # 3) Stacked + study fixed effect
+  fit_stack_study <- lm(update(fm, . ~ . + factor(Study)), data = stacked)
+
+  true_ate <- mean(5 + 12 * current_df$Bio_1)
+
+>>>>>>> 2422643b4257915cedb6f819732ead5a8e03166f
   res <- list(
     true_ate = true_ate,
     current = ate_from_lm(fit_current, current_df),
@@ -164,13 +199,21 @@ run_simulation <- function(drifts = c(-3, -1, 0, 1, 3),
                            H = 5, n_hist = 200, n_trial = 500) {
   library(dplyr)
   out <- list()
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 2422643b4257915cedb6f819732ead5a8e03166f
   for (d in drifts) {
     sim_res <- replicate(reps, {
       s <- simulate_one(H, n_hist, n_trial, global_hist_drift = d)
       fit_and_eval(s$historical, s$current)
     }, simplify = FALSE)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 2422643b4257915cedb6f819732ead5a8e03166f
     # extract metrics
     df <- tibble::tibble(rep = 1:reps) %>%
       mutate(
@@ -179,25 +222,41 @@ run_simulation <- function(drifts = c(-3, -1, 0, 1, 3),
         se_current = sapply(sim_res, function(x) x$current$se),
         ci_l_current = sapply(sim_res, function(x) x$current$ci["lower"]),
         ci_u_current = sapply(sim_res, function(x) x$current$ci["upper"]),
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 2422643b4257915cedb6f819732ead5a8e03166f
         ate_stacked = sapply(sim_res, function(x) x$stacked$ate),
         se_stacked = sapply(sim_res, function(x) x$stacked$se),
         ci_l_stacked = sapply(sim_res, function(x) x$stacked$ci["lower"]),
         ci_u_stacked = sapply(sim_res, function(x) x$stacked$ci["upper"]),
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 2422643b4257915cedb6f819732ead5a8e03166f
         ate_study = sapply(sim_res, function(x) x$stacked_study$ate),
         se_study = sapply(sim_res, function(x) x$stacked_study$se),
         ci_l_study = sapply(sim_res, function(x) x$stacked_study$ci["lower"]),
         ci_u_study = sapply(sim_res, function(x) x$stacked_study$ci["upper"])
       )
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 2422643b4257915cedb6f819732ead5a8e03166f
     summarize_metrics <- function(ate, ci_l, ci_u, true) {
       bias <- mean(ate - true)
       rmse <- sqrt(mean((ate - true)^2))
       coverage <- mean(ci_l <= true & ci_u >= true)
       c(bias = bias, rmse = rmse, coverage = coverage)
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 2422643b4257915cedb6f819732ead5a8e03166f
     metrics <- rbind(
       current = summarize_metrics(df$ate_current, df$ci_l_current, df$ci_u_current, df$true),
       stacked = summarize_metrics(df$ate_stacked, df$ci_l_stacked, df$ci_u_stacked, df$true),
@@ -205,6 +264,10 @@ run_simulation <- function(drifts = c(-3, -1, 0, 1, 3),
     )
     out[[as.character(d)]] <- list(metrics = metrics, raw = df)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 2422643b4257915cedb6f819732ead5a8e03166f
   out
 }

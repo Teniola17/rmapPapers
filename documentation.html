@@ -59,18 +59,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="documentationa_files/libs/clipboard/clipboard.min.js"></script>
-<script src="documentationa_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="documentationa_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="documentationa_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="documentationa_files/libs/quarto-html/popper.min.js"></script>
-<script src="documentationa_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="documentationa_files/libs/quarto-html/anchor.min.js"></script>
-<link href="documentationa_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="documentationa_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="documentationa_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="documentationa_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="documentationa_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="documentation_files/libs/clipboard/clipboard.min.js"></script>
+<script src="documentation_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="documentation_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="documentation_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="documentation_files/libs/quarto-html/popper.min.js"></script>
+<script src="documentation_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="documentation_files/libs/quarto-html/anchor.min.js"></script>
+<link href="documentation_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="documentation_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="documentation_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="documentation_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="documentation_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -137,7 +137,207 @@ window.Quarto = {
 
 <section id="overview" class="level1">
 <h1>Overview</h1>
-<p>This document describes a two–stage Bayesian borrowing approach:</p>
+<p>This document describes The Data generation procedure and the Bayesian Borrowing steps:</p>
+</section>
+<section id="data-generation" class="level1">
+<h1>Data Generation</h1>
+<p>The goal is to create a realistic clinical trial setting with:</p>
+<ul>
+<li>Multiple <strong>historical studies</strong> (placebo only),</li>
+<li>One <strong>current randomized trial</strong> (placebo + treatment),</li>
+<li>High-dimensional, collinear covariates,</li>
+<li>Both <strong>prognostic</strong> and <strong>predictive</strong> covariate effects,</li>
+<li>Optional <strong>distributional drift</strong> between historical and current data.</li>
+</ul>
+<p>The full data-generating process is known and controlled, enabling principled evaluation of borrowing and transfer-learning methods.</p>
+<hr>
+<section id="global-simulation-parameters" class="level2">
+<h2 class="anchored" data-anchor-id="global-simulation-parameters">Global Simulation Parameters</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>n_hist <span class="ot">&lt;-</span> <span class="dv">200</span>      <span class="co"># Patients per historical study</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>n_trial <span class="ot">&lt;-</span> <span class="dv">500</span>     <span class="co"># Patients in current trial</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>H <span class="ot">&lt;-</span> <span class="dv">5</span>             <span class="co"># Number of historical studies</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>p_cont <span class="ot">&lt;-</span> <span class="dv">50</span>       <span class="co"># Number of continuous features</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>p_bin <span class="ot">&lt;-</span> <span class="dv">5</span>         <span class="co"># Number of binary biomarkers</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fl">0.8</span>         <span class="co"># Correlation for collinearity</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>global_hist_drift <span class="ot">&lt;-</span> <span class="dv">0</span>  <span class="co"># Global historical vs current shift</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>As an example (just to show for a replicate)</p>
+<p>The simulation consists of:</p>
+<ul>
+<li><span class="math inline">\(H = 5\)</span> historical studies, each with <span class="math inline">\(n_{hist}=200\)</span> subjects,</li>
+<li>One current study with <span class="math inline">\(n_{trial} =500\)</span> subjects,</li>
+<li><span class="math inline">\(p=55\)</span> covariates in total:
+<ul>
+<li><span class="math inline">\(50\)</span> continuous laboratory variables,</li>
+<li><span class="math inline">\(5\)</span> binary biomarkers.</li>
+</ul></li>
+</ul>
+</section>
+<section id="covariates-generation" class="level2">
+<h2 class="anchored" data-anchor-id="covariates-generation">Covariates Generation</h2>
+<section id="continuous-features" class="level3">
+<h3 class="anchored" data-anchor-id="continuous-features">Continuous Features</h3>
+<p>Continuous covariates are generated from a multivarite normal distribution with strong colinearity. The covariance matrix follows the <a href="https://en.wikipedia.org/wiki/Toeplitz_matrix" title="Toeplitz matrix">Toeplitz</a> structure:</p>
+<p><span class="math display">\[
+\Sigma_{ij}=\rho^{|i-j|}, \ \ \ \ \rho = 0.8
+\]</span> This is made to include realistic correlation patterns commonly observed in clinical laboratory data.</p>
+</section>
+<section id="binary-biomarkers" class="level3">
+<h3 class="anchored" data-anchor-id="binary-biomarkers">Binary Biomarkers</h3>
+<p>Binary biomarkers represent genetic or molecular indicators and are generated independently from a Bernolli distribution with success probability 0.3.</p>
+<p>The procedure for the covariates generation is implemented in the following function:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>generate_x <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  sigma <span class="ot">&lt;-</span> <span class="fu">toeplitz</span>(rho<span class="sc">^</span>(<span class="dv">0</span><span class="sc">:</span>(p_cont <span class="sc">-</span> <span class="dv">1</span>)))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  X_cont <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(n, <span class="at">mu =</span> <span class="fu">rep</span>(<span class="dv">0</span>, p_cont), <span class="at">Sigma =</span> sigma)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  X_bin <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rbinom</span>(n <span class="sc">*</span> p_bin, <span class="dv">1</span>, <span class="fl">0.3</span>), <span class="at">nrow =</span> n)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(X_cont) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"Lab_"</span>, <span class="dv">1</span><span class="sc">:</span>p_cont)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(X_bin) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"Bio_"</span>, <span class="dv">1</span><span class="sc">:</span>p_bin)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(X_cont, X_bin)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="outcome-model" class="level2">
+<h2 class="anchored" data-anchor-id="outcome-model">Outcome Model</h2>
+<p>The continuous outcome variable <span class="math inline">\(Y\)</span> is generated as the sum of:</p>
+<ol type="1">
+<li><p>Prognostic signal (covariate main effects),</p></li>
+<li><p>Predictive treatment effect (treatment–biomarker interaction),</p></li>
+<li><p>Study-level drift (historical studies only),</p></li>
+<li><p>Global historical drift (optional, a measure of descrepancy between the joint historical data and the current data),</p></li>
+<li><p>Random noise.</p></li>
+</ol>
+<section id="prognostic-component" class="level3">
+<h3 class="anchored" data-anchor-id="prognostic-component">Prognostic component</h3>
+<p>The prognostic signal is nonlinear and involves interactions:</p>
+<p><span class="math display">\[
+f(x) = 2Lab_1 +3Lab_2^2 +5sign(Lab_3) + 4Lab_4 \times Lab_5
+\]</span></p>
+</section>
+<section id="predictive-treatment-component" class="level3">
+<h3 class="anchored" data-anchor-id="predictive-treatment-component">Predictive (Treatment) component</h3>
+<p>Treatment effects depend on biomarker status:</p>
+<p><span class="math display">\[
+g(X,T)=5T+12T\times Bio_1
+\]</span> This creates a strong predictive biomarker, where subjects with <span class="math inline">\(Bio_1=1\)</span> experuence substantially larger treatment effects.</p>
+</section>
+<section id="noise-and-drift" class="level3">
+<h3 class="anchored" data-anchor-id="noise-and-drift">Noise and Drift</h3>
+<ul>
+<li>Observation-level noise: <span class="math inline">\(\varepsilon \sim N(0,2^2)\)</span></li>
+<li>Inter study drift: obtained from a random Uniform sample <span class="math inline">\([-2,2]\)</span> (historical study only)</li>
+<li>Global historical drift: constant shift applied to all historical data, to shift it from the current trial.</li>
+</ul>
+<p>The function for the outcome generation is as follows:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>generate_y <span class="ot">&lt;-</span> <span class="cf">function</span>(X, Trt,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">study_drift =</span> <span class="dv">0</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">global_hist_drift =</span> <span class="dv">0</span>) {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  prog_signal <span class="ot">&lt;-</span> (<span class="dv">2</span> <span class="sc">*</span> X[, <span class="st">"Lab_1"</span>]) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">3</span> <span class="sc">*</span> X[, <span class="st">"Lab_2"</span>]<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">5</span> <span class="sc">*</span> <span class="fu">sin</span>(X[, <span class="st">"Lab_3"</span>])) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">4</span> <span class="sc">*</span> X[, <span class="st">"Lab_4"</span>] <span class="sc">*</span> X[, <span class="st">"Lab_5"</span>])</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  trt_effect <span class="ot">&lt;-</span> (<span class="dv">5</span> <span class="sc">*</span> Trt) <span class="sc">+</span> (<span class="dv">12</span> <span class="sc">*</span> Trt <span class="sc">*</span> X[, <span class="st">"Bio_1"</span>])</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  noise <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fu">nrow</span>(X), <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">2</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  prog_signal <span class="sc">+</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    trt_effect <span class="sc">+</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    study_drift <span class="sc">+</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    global_hist_drift <span class="sc">+</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    noise</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="historical-data-generation" class="level2">
+<h2 class="anchored" data-anchor-id="historical-data-generation">Historical Data Generation</h2>
+<p>Each historical study:</p>
+<ul>
+<li><p>Contains placebo-only subjects,</p></li>
+<li><p>Shares the same covariate distribution,</p></li>
+<li><p>Has its own random study-level drift,</p></li>
+<li><p>Optionally shares a pooled historical drift.</p></li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>historical_data <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span>H, <span class="cf">function</span>(s) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">generate_x</span>(n_hist)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  Trt <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, n_hist)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  Y <span class="ot">&lt;-</span> <span class="fu">generate_y</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    X, Trt,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">study_drift =</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">global_hist_drift =</span> global_hist_drift</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Study =</span> <span class="fu">paste0</span>(<span class="st">"H"</span>, s),</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Treatment =</span> Trt,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Target =</span> Y,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    X</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="current-trial-generation" class="level2">
+<h2 class="anchored" data-anchor-id="current-trial-generation">Current Trial Generation</h2>
+<p>The current trial differs from historical data in that:</p>
+<ul>
+<li><p>Subjects are randomized to treatment with probability 0.7,</p></li>
+<li><p>No study-level or global drift is applied,</p></li>
+<li><p>Both prognostic and predictive effects are active</p></li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>X_trial <span class="ot">&lt;-</span> <span class="fu">generate_x</span>(n_trial)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Trt_trial <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n_trial, <span class="dv">1</span>, <span class="fl">0.7</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>Y_trial <span class="ot">&lt;-</span> <span class="fu">generate_y</span>(X_trial, Trt_trial)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>current_trial <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Study =</span> <span class="st">"Current"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Treatment =</span> Trt_trial,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Target =</span> Y_trial,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  X_trial</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>all_data <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">c</span>(historical_data, <span class="fu">list</span>(current_trial)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="just-to-check-the-predictive-biomarker-effect" class="level2">
+<h2 class="anchored" data-anchor-id="just-to-check-the-predictive-biomarker-effect">Just to check the predictive Biomarker Effect</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  current_trial,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Bio_1), <span class="at">y =</span> Target, <span class="at">fill =</span> <span class="fu">factor</span>(Treatment))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Treatment Effect Modulated by Bio_1"</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Biomarker 1 Status"</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Treatment"</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="documentation_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="bayesian-borrowing-technique" class="level1">
+<h1>Bayesian Borrowing technique</h1>
 <ol type="1">
 <li>Construction of a <strong>prognostic score</strong> using historical control data.</li>
 <li>Construction of a <strong>MAP (Meta-Analytic-Predictive) prior</strong> using the prognostic score.</li>
@@ -194,7 +394,7 @@ m_i = \hat{f}(X_i)
 <section id="r-fit-random-forest-prognostic-model" class="level2">
 <h2 class="anchored" data-anchor-id="r-fit-random-forest-prognostic-model">R: Fit Random Forest Prognostic Model</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="important-note-on-drift" class="level3">
 <h3 class="anchored" data-anchor-id="important-note-on-drift">Important note on drift:</h3>
@@ -212,32 +412,32 @@ Y \sim X + Study
 <section id="step-2-compute-the-prognostic-scores" class="level1">
 <h1>Step 2: Compute the prognostic scores</h1>
 <p>Once the Prognostic model is built (trained):</p>
-<dl>
-<dt>Compute the prognostic scores as follows:</dt>
-<dd>
-<p>For historical Controls:<br>
+<p>Compute the prognostic scores as follows:</p>
+<ul>
+<li>For historical Controls:<br>
 <span class="math display">\[
 m_i^H = \hat{f}\left(X_i^H\right)
-\]</span></p>
-</dd>
-<dd>
-For current trial: <span class="math display">\[
+\]</span></li>
+<li>For current trial: <span class="math display">\[
 m_i^C = \hat{f}\left(X_i^C\right)
-\]</span>
-</dd>
-</dl>
+\]</span></li>
+</ul>
 <p>So that every patient (regardless of where s(he) belongs) has <span class="math inline">\(m_i\)</span>, [prognostic score]</p>
 <hr>
 </section>
 <section id="step-3-build-the-map-prior-informative-component" class="level1">
 <h1>Step 3 Build the MAP prior (Informative component)</h1>
 <p>Now ignore the original covariates and use only the outcome <span class="math inline">\(Y\)</span> and the prognostic score <span class="math inline">\(m\)</span> for the historical controls.</p>
-<p><strong>For each dataset <span class="math inline">\(k\)</span></strong></p>
+<p><strong>For each dataset</strong> <span class="math inline">\(k\)</span></p>
 <p>Fit: <span class="math display">\[
 Y_{ik} = \beta_{0k} + \beta_{2k}m_{ik} + \varepsilon_{ik}
 \]</span> This gives the posterior: <span class="math inline">\(\pi_k\left(\beta_0, \beta_2,\sigma^2\right)\)</span></p>
-<p>These are combined across studies using MAP to get the <span class="math inline">\(MAP\)</span> prior.</p>
-<p>Also, it can be robustified using the <code>RBesT</code> package to get the informative and the non informative components of the prior.</p>
+<p>These are combined across studies using MAP to get the <span class="math inline">\(MAP\)</span> prior. And can be converted to a mixture of conjugate distributions using<code>automixfit</code> function from the <code>RBesT</code> package.</p>
+<hr>
+</section>
+<section id="step-4-robustification" class="level1">
+<h1>Step 4: “Robustification”</h1>
+<p>The prior can then be robustified using the <code>RBesT</code> package to get the informative and the non informative components of the prior. Where an initial weight of the robust component is given as an argument of the function.</p>
 <hr>
 </section>
 <section id="step-5-analysis-model-in-the-current-trial" class="level1">
