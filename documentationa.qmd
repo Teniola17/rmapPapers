@@ -1,0 +1,165 @@
+---
+title: "Prognostic Score Construction and MAP Prior Workflow"
+author: "Emmanuel"
+format: html
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+# Overview
+
+This document describes a two–stage Bayesian borrowing approach:
+
+1. Construction of a **prognostic score** using historical control data.
+2. Construction of a **MAP (Meta-Analytic-Predictive) prior** using the prognostic score.
+3. Application of the MAP prior in the current trial.
+
+Assume:
+
+- $K$ historical trials
+- Patient-level covariates $X_i$
+- Outcome $Y_i$
+- Treatment indicator $w_i$
+
+---
+
+# Notation
+
+For patient $i$ in study $k$:
+
+$$
+(X_{ik}, Y_{ik}, w_{ik})
+$$
+
+Where:
+
+- $X_{ik} \in \mathbb{R}^p$: baseline covariates
+- $Y_{ik}$: outcome
+- $w_{ik} \in \{0,1\}$: treatment indicator
+
+Let:
+
+$$
+\mathcal{H} = \bigcup_{k=1}^K D_k^{(control)}
+$$
+
+
+be the pooled historical control dataset.
+
+---
+
+# Step 1: Build the prognostic model
+
+
+The prognostic score is defined as:
+
+$$
+m_i = E(Y_i \mid X_i, \text{Control})
+$$
+
+We estimate this function using a random forest trained on historical controls.
+
+Formally:
+
+$$
+Y_i^{H} = f(X_i^{H}) + \varepsilon_i
+$$
+
+where:
+
+- $f(\cdot)$ is an unknown nonlinear function
+- estimated using any machine learning model.
+
+The prognostic score is:
+
+$$
+m_i = \hat{f}(X_i)
+$$
+
+
+## R: Fit Random Forest Prognostic Model
+
+```{r}
+library(randomForest)
+
+
+```
+
+
+### Important note on drift:
+
+There are two choices on how to fuit the prognostic models to/not to capture the inter-trial variability:
+
+Option A: Ignore the study indicator (this is simple pooling of the historical data)
+
+$$Y \sim X$$
+This assumes that the prognostic relationship is similar across trials.
+
+Option B: Include the study as a feature of the prognostic model:
+
+$$
+Y \sim X + Study
+$$
+This captures the inter-trial differences and baseline shifts.
+
+---
+
+# Step 2: Compute the prognostic scores
+
+Once the Prognostic model is built (trained):
+
+Compute the prognostic scores as follows:
+
+~ For historical Controls:  
+$$
+m_i^H = \hat{f}\left(X_i^H\right)
+$$
+~ For current trial:
+$$
+m_i^C = \hat{f}\left(X_i^C\right)
+$$
+
+So that every patient (regardless of where s(he) belongs) has $m_i$, [prognostic score]
+
+---
+
+# Step 3 Build the MAP prior (Informative component)
+
+Now ignore the original covariates and use only the outcome $Y$ and the prognostic score $m$ for the historical controls.
+
+**For each dataset $k$**
+
+Fit:
+$$
+Y_{ik} = \beta_{0k} + \beta_{2k}m_{ik} + \varepsilon_{ik}
+$$
+This gives the posterior: $\pi_k\left(\beta_0, \beta_2,\sigma^2\right)$
+
+These are combined across studies using MAP to get the $MAP$ prior.
+
+Also, it can be robustified using the `RBesT` package to get the informative and the non informative components of the prior.
+
+
+---
+
+# Step 5: Analysis Model in the Current trial
+
+Now, the analysis model is fitted:
+
+$$
+Y_i = \beta_0 + \beta_1w_i + \beta_2m_i + varepsilon_i
+$$
+
+With the mixture prior:
+
+$$
+\pi(\theta) = \omega \pi_1(\theta) + (1-\omega)\pi_0(\theta)
+$$
+
+where:
+$\pi_1$ is the informative prior (from the historical data)
+$\pi_0$ is the non informative (Vague) component.
+
+
