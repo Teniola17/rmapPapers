@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -67,7 +67,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="documentation_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="documentation_files/libs/quarto-html/anchor.min.js"></script>
 <link href="documentation_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="documentation_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="documentation_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="documentation_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="documentation_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="documentation_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -371,7 +371,7 @@ g(X,T)=5T+12T\times Bio_1
 \]</span></p>
 <p>be the pooled historical control dataset. The structure of the data is:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>samp <span class="ot">&lt;-</span> all_data <span class="sc">%&gt;%</span> <span class="fu">select</span>(Study, Treatment, Target, Lab_1, Lab_2, Bio_1) </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>samp <span class="ot">&lt;-</span> all_data <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(Study, Treatment, Target, Lab_1, Lab_2, Bio_1) </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(samp[<span class="fu">sample</span>(<span class="fu">nrow</span>(samp), <span class="dv">10</span>), ], <span class="at">caption =</span> <span class="st">"Sample of Pooled data"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -389,93 +389,93 @@ g(X,T)=5T+12T\times Bio_1
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">1065</td>
-<td style="text-align: left;">Current</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">9.5147387</td>
-<td style="text-align: right;">-0.6829795</td>
-<td style="text-align: right;">-0.1848869</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">425</td>
-<td style="text-align: left;">H3</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0.7363456</td>
-<td style="text-align: right;">-0.1824061</td>
-<td style="text-align: right;">0.3131589</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">257</td>
+<td style="text-align: left;">251</td>
 <td style="text-align: left;">H2</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">2.6709805</td>
-<td style="text-align: right;">0.7581930</td>
-<td style="text-align: right;">0.6357282</td>
+<td style="text-align: right;">34.0283772</td>
+<td style="text-align: right;">-2.0199425</td>
+<td style="text-align: right;">-2.7871091</td>
 <td style="text-align: right;">0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">1449</td>
-<td style="text-align: left;">Current</td>
+<td style="text-align: left;">24</td>
+<td style="text-align: left;">H1</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">-2.3089381</td>
-<td style="text-align: right;">-0.5865991</td>
-<td style="text-align: right;">-0.3146680</td>
+<td style="text-align: right;">7.6227296</td>
+<td style="text-align: right;">-0.7575796</td>
+<td style="text-align: right;">-1.5812486</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">656</td>
+<td style="text-align: left;">H4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">16.9612282</td>
+<td style="text-align: right;">0.8103810</td>
+<td style="text-align: right;">0.6373346</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">181</td>
+<td style="text-align: left;">H1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3.2874843</td>
+<td style="text-align: right;">-1.4762258</td>
+<td style="text-align: right;">-1.2350408</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">1031</td>
-<td style="text-align: left;">Current</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">23.0700779</td>
-<td style="text-align: right;">0.8854344</td>
-<td style="text-align: right;">0.0561708</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">1431</td>
-<td style="text-align: left;">Current</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">-1.4383363</td>
-<td style="text-align: right;">-0.5308048</td>
-<td style="text-align: right;">-0.4536094</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">986</td>
+<td style="text-align: left;">858</td>
 <td style="text-align: left;">H5</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">0.0900624</td>
-<td style="text-align: right;">-0.5267692</td>
-<td style="text-align: right;">-1.2217554</td>
+<td style="text-align: right;">0.9521048</td>
+<td style="text-align: right;">-0.2302289</td>
+<td style="text-align: right;">0.5157111</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">1196</td>
-<td style="text-align: left;">Current</td>
+<td style="text-align: left;">160</td>
+<td style="text-align: left;">H1</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">-1.0604591</td>
-<td style="text-align: right;">-0.2259750</td>
-<td style="text-align: right;">0.3089917</td>
+<td style="text-align: right;">26.5735461</td>
+<td style="text-align: right;">2.2284349</td>
+<td style="text-align: right;">1.7962344</td>
 <td style="text-align: right;">0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">1480</td>
-<td style="text-align: left;">Current</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">9.4229943</td>
-<td style="text-align: right;">-1.1672142</td>
-<td style="text-align: right;">0.0358700</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: left;">599</td>
+<td style="text-align: left;">H3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6.3658091</td>
+<td style="text-align: right;">-1.4237654</td>
+<td style="text-align: right;">-1.2898448</td>
+<td style="text-align: right;">0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">1246</td>
+<td style="text-align: left;">1265</td>
+<td style="text-align: left;">Current</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">-3.4423271</td>
+<td style="text-align: right;">0.0628560</td>
+<td style="text-align: right;">-0.1303974</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">239</td>
+<td style="text-align: left;">H2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.8066569</td>
+<td style="text-align: right;">0.4965695</td>
+<td style="text-align: right;">-0.0516355</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1242</td>
 <td style="text-align: left;">Current</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">10.1174265</td>
-<td style="text-align: right;">0.0866500</td>
-<td style="text-align: right;">-0.2468102</td>
+<td style="text-align: right;">20.3660446</td>
+<td style="text-align: right;">-0.8430605</td>
+<td style="text-align: right;">-1.7068532</td>
 <td style="text-align: right;">0</td>
 </tr>
 </tbody>
@@ -508,6 +508,92 @@ m_i = \hat{f}(X_i)
 \]</span></p>
 <section id="r-fit-random-forest-prognostic-model" class="level2">
 <h2 class="anchored" data-anchor-id="r-fit-random-forest-prognostic-model">R: Fit Random Forest Prognostic Model</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>hist_df <span class="ot">&lt;-</span> all_data <span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Study<span class="sc">!=</span><span class="st">"Current"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>Treatment)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># split into test and training sets</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>Split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(hist_df, <span class="at">prop =</span> <span class="fl">0.75</span>, <span class="at">strata =</span> Study)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>train_df <span class="ot">&lt;-</span> <span class="fu">training</span>(Split)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>test_df <span class="ot">&lt;-</span> <span class="fu">testing</span>(Split)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># v fold CV</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(train_df, <span class="at">v =</span> <span class="dv">5</span>, <span class="at">strata =</span> Study)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co"># recipe</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(Target <span class="sc">~</span> ., <span class="at">data =</span> train_df) <span class="sc">%&gt;%</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_zv</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span>      <span class="co"># remove zero-variance columns</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(Study)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="co"># model specification</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>rf_model <span class="ot">&lt;-</span> <span class="fu">rand_forest</span>(</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">trees =</span> <span class="dv">500</span>,</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">mtry =</span> <span class="fu">tune</span>(),</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_n =</span> <span class="fu">tune</span>()</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"ranger"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"regression"</span>)</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec) <span class="sc">%&gt;%</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(rf_model)</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>rf_grid <span class="ot">&lt;-</span> <span class="fu">grid_regular</span>(</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mtry</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">30</span>)),</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">min_n</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">20</span>)),</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="dv">5</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>tuned_results <span class="ot">&lt;-</span> <span class="fu">tune_grid</span>(</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>  wf,</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">resamples =</span> folds,</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid =</span> rf_grid,</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="fu">metric_set</span>(rmse, rsq)</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>best_params <span class="ot">&lt;-</span> <span class="fu">select_best</span>(tuned_results, <span class="at">metric =</span> <span class="st">"rmse"</span>)</span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>best_params</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+   mtry min_n .config         
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;           
+1    30     6 pre0_mod22_post0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>final_wf <span class="ot">&lt;-</span> <span class="fu">finalize_workflow</span>(wf, best_params)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># fit </span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>final_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(final_wf, <span class="at">data =</span> train_df)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluating model</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>test_preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(final_fit, test_df) <span class="sc">%&gt;%</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(test_df)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="fu">metrics</span>(test_preds, <span class="at">truth =</span> Target, <span class="at">estimate =</span> .pred)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 rmse    standard       3.70 
+2 rsq     standard       0.889
+3 mae     standard       2.77 </code></pre>
+</div>
+</div>
 <section id="important-note-on-drift" class="level3">
 <h3 class="anchored" data-anchor-id="important-note-on-drift">Important note on drift:</h3>
 <p>There are two choices on how to fuit the prognostic models to/not to capture the inter-trial variability:</p>
@@ -535,6 +621,17 @@ m_i^C = \hat{f}\left(X_i^C\right)
 \]</span></li>
 </ul>
 <p>So that every patient (regardless of where s(he) belongs) has <span class="math inline">\(m_i\)</span>, [prognostic score]</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>current_ml <span class="ot">&lt;-</span> current_trial <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>Treatment)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>hist_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(final_fit, hist_df)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>current_preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(final_fit, current_ml)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># the new data</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <hr>
 </section>
 <section id="step-3-build-the-map-prior-informative-component" class="level1">
@@ -545,11 +642,482 @@ m_i^C = \hat{f}\left(X_i^C\right)
 Y_{ik} = \beta_{0k} + \beta_{2k}m_{ik} + \varepsilon_{ik}
 \]</span> This gives the posterior: <span class="math inline">\(\pi_k\left(\beta_0, \beta_2,\sigma^2\right)\)</span></p>
 <p>These are combined across studies using MAP to get the <span class="math inline">\(MAP\)</span> prior. And can be converted to a mixture of conjugate distributions using<code>automixfit</code> function from the <code>RBesT</code> package.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#hist_df2 &lt;- data.frame(outcome=hist_df$Target, pred=hist_pred)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># the map model</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cmdstanr)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>hist_data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> <span class="fu">length</span>(hist_df<span class="sc">$</span>Target),</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">J =</span> <span class="fu">length</span>(<span class="fu">unique</span>(<span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"[^0-9]"</span>, <span class="st">""</span>, hist_df<span class="sc">$</span>Study)))),</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">trial =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"[^0-9]"</span>, <span class="st">""</span>, hist_df<span class="sc">$</span>Study)),</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> hist_pred<span class="sc">$</span>.pred,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> hist_df<span class="sc">$</span>Target</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>mod_ps <span class="ot">&lt;-</span> <span class="fu">cmdstan_model</span>(<span class="st">"borrowing_on_ps.stan"</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>fit_hist_ps <span class="ot">&lt;-</span> mod_ps<span class="sc">$</span><span class="fu">sample</span>(</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> hist_data,</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">4</span>,</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter_warmup =</span> <span class="dv">1000</span>,</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter_sampling =</span> <span class="dv">2000</span>,</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">123</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running MCMC with 4 sequential chains...
+
+Chain 1 Iteration:    1 / 3000 [  0%]  (Warmup) </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Chain 1 Iteration:  100 / 3000 [  3%]  (Warmup) 
+Chain 1 Iteration:  200 / 3000 [  6%]  (Warmup) 
+Chain 1 Iteration:  300 / 3000 [ 10%]  (Warmup) 
+Chain 1 Iteration:  400 / 3000 [ 13%]  (Warmup) 
+Chain 1 Iteration:  500 / 3000 [ 16%]  (Warmup) 
+Chain 1 Iteration:  600 / 3000 [ 20%]  (Warmup) 
+Chain 1 Iteration:  700 / 3000 [ 23%]  (Warmup) 
+Chain 1 Iteration:  800 / 3000 [ 26%]  (Warmup) 
+Chain 1 Iteration:  900 / 3000 [ 30%]  (Warmup) 
+Chain 1 Iteration: 1000 / 3000 [ 33%]  (Warmup) 
+Chain 1 Iteration: 1001 / 3000 [ 33%]  (Sampling) 
+Chain 1 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
+Chain 1 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
+Chain 1 Iteration: 1300 / 3000 [ 43%]  (Sampling) 
+Chain 1 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
+Chain 1 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
+Chain 1 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
+Chain 1 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
+Chain 1 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
+Chain 1 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
+Chain 1 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
+Chain 1 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
+Chain 1 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
+Chain 1 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
+Chain 1 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
+Chain 1 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
+Chain 1 Iteration: 2600 / 3000 [ 86%]  (Sampling) 
+Chain 1 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
+Chain 1 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
+Chain 1 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
+Chain 1 Iteration: 3000 / 3000 [100%]  (Sampling) 
+Chain 1 finished in 26.5 seconds.
+Chain 2 Iteration:    1 / 3000 [  0%]  (Warmup) </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Chain 2 Iteration:  100 / 3000 [  3%]  (Warmup) 
+Chain 2 Iteration:  200 / 3000 [  6%]  (Warmup) 
+Chain 2 Iteration:  300 / 3000 [ 10%]  (Warmup) 
+Chain 2 Iteration:  400 / 3000 [ 13%]  (Warmup) 
+Chain 2 Iteration:  500 / 3000 [ 16%]  (Warmup) 
+Chain 2 Iteration:  600 / 3000 [ 20%]  (Warmup) 
+Chain 2 Iteration:  700 / 3000 [ 23%]  (Warmup) 
+Chain 2 Iteration:  800 / 3000 [ 26%]  (Warmup) 
+Chain 2 Iteration:  900 / 3000 [ 30%]  (Warmup) 
+Chain 2 Iteration: 1000 / 3000 [ 33%]  (Warmup) 
+Chain 2 Iteration: 1001 / 3000 [ 33%]  (Sampling) 
+Chain 2 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
+Chain 2 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
+Chain 2 Iteration: 1300 / 3000 [ 43%]  (Sampling) 
+Chain 2 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
+Chain 2 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
+Chain 2 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
+Chain 2 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
+Chain 2 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
+Chain 2 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
+Chain 2 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
+Chain 2 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
+Chain 2 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
+Chain 2 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
+Chain 2 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
+Chain 2 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
+Chain 2 Iteration: 2600 / 3000 [ 86%]  (Sampling) 
+Chain 2 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
+Chain 2 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
+Chain 2 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
+Chain 2 Iteration: 3000 / 3000 [100%]  (Sampling) 
+Chain 2 finished in 23.9 seconds.
+Chain 3 Iteration:    1 / 3000 [  0%]  (Warmup) </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Chain 3 Iteration:  100 / 3000 [  3%]  (Warmup) 
+Chain 3 Iteration:  200 / 3000 [  6%]  (Warmup) 
+Chain 3 Iteration:  300 / 3000 [ 10%]  (Warmup) 
+Chain 3 Iteration:  400 / 3000 [ 13%]  (Warmup) 
+Chain 3 Iteration:  500 / 3000 [ 16%]  (Warmup) 
+Chain 3 Iteration:  600 / 3000 [ 20%]  (Warmup) 
+Chain 3 Iteration:  700 / 3000 [ 23%]  (Warmup) 
+Chain 3 Iteration:  800 / 3000 [ 26%]  (Warmup) 
+Chain 3 Iteration:  900 / 3000 [ 30%]  (Warmup) 
+Chain 3 Iteration: 1000 / 3000 [ 33%]  (Warmup) 
+Chain 3 Iteration: 1001 / 3000 [ 33%]  (Sampling) 
+Chain 3 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
+Chain 3 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
+Chain 3 Iteration: 1300 / 3000 [ 43%]  (Sampling) 
+Chain 3 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
+Chain 3 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
+Chain 3 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
+Chain 3 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
+Chain 3 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
+Chain 3 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
+Chain 3 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
+Chain 3 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
+Chain 3 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
+Chain 3 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
+Chain 3 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
+Chain 3 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
+Chain 3 Iteration: 2600 / 3000 [ 86%]  (Sampling) 
+Chain 3 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
+Chain 3 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
+Chain 3 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
+Chain 3 Iteration: 3000 / 3000 [100%]  (Sampling) 
+Chain 3 finished in 22.9 seconds.
+Chain 4 Iteration:    1 / 3000 [  0%]  (Warmup) </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Chain 4 Iteration:  100 / 3000 [  3%]  (Warmup) 
+Chain 4 Iteration:  200 / 3000 [  6%]  (Warmup) 
+Chain 4 Iteration:  300 / 3000 [ 10%]  (Warmup) 
+Chain 4 Iteration:  400 / 3000 [ 13%]  (Warmup) 
+Chain 4 Iteration:  500 / 3000 [ 16%]  (Warmup) 
+Chain 4 Iteration:  600 / 3000 [ 20%]  (Warmup) 
+Chain 4 Iteration:  700 / 3000 [ 23%]  (Warmup) 
+Chain 4 Iteration:  800 / 3000 [ 26%]  (Warmup) 
+Chain 4 Iteration:  900 / 3000 [ 30%]  (Warmup) 
+Chain 4 Iteration: 1000 / 3000 [ 33%]  (Warmup) 
+Chain 4 Iteration: 1001 / 3000 [ 33%]  (Sampling) 
+Chain 4 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
+Chain 4 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
+Chain 4 Iteration: 1300 / 3000 [ 43%]  (Sampling) 
+Chain 4 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
+Chain 4 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
+Chain 4 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
+Chain 4 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
+Chain 4 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
+Chain 4 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
+Chain 4 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
+Chain 4 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
+Chain 4 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
+Chain 4 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
+Chain 4 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
+Chain 4 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
+Chain 4 Iteration: 2600 / 3000 [ 86%]  (Sampling) 
+Chain 4 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
+Chain 4 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
+Chain 4 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
+Chain 4 Iteration: 3000 / 3000 [100%]  (Sampling) 
+Chain 4 finished in 28.8 seconds.
+
+All 4 chains finished successfully.
+Mean chain execution time: 25.5 seconds.
+Total execution time: 103.3 seconds.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RBesT)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#fit_hist_ps$summary()</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>theta1_draw <span class="ot">&lt;-</span> fit_hist_ps<span class="sc">$</span><span class="fu">draws</span>(<span class="st">"theta_new[1]"</span>)<span class="sc">|&gt;</span><span class="fu">as.numeric</span>()</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>theta2_draw <span class="ot">&lt;-</span> fit_hist_ps<span class="sc">$</span><span class="fu">draws</span>(<span class="st">"theta_new[2]"</span>)<span class="sc">|&gt;</span><span class="fu">as.numeric</span>()</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>mapize1 <span class="ot">&lt;-</span> <span class="fu">automixfit</span>(theta1_draw, <span class="at">Nc=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co"># intercept</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>alpha_m <span class="ot">&lt;-</span> mapize1[<span class="st">"m"</span>,]</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>alpha_s <span class="ot">&lt;-</span> mapize1[<span class="st">"s"</span>,]</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>alpha_w <span class="ot">&lt;-</span> mapize1[<span class="st">"w"</span>,]</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>alpha_k <span class="ot">&lt;-</span> <span class="fu">length</span>(alpha_m)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co"># covariate</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>mapize2 <span class="ot">&lt;-</span> <span class="fu">automixfit</span>(theta2_draw, <span class="at">Nc=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>beta_m <span class="ot">&lt;-</span> mapize2[<span class="st">"m"</span>,]</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>beta_s <span class="ot">&lt;-</span> mapize2[<span class="st">"s"</span>,]</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>beta_w <span class="ot">&lt;-</span> mapize2[<span class="st">"w"</span>,]</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>beta_k <span class="ot">&lt;-</span> <span class="fu">length</span>(beta_m)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply it to the current data</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>mod_ps_mapcur <span class="ot">&lt;-</span> <span class="fu">cmdstan_model</span>(<span class="st">"current_trial_with_ps.stan"</span>)</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>data_curr_ps <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> <span class="fu">length</span>(current_ml<span class="sc">$</span>Target),</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> current_ml<span class="sc">$</span>Target,</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">trt =</span> all_data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Study<span class="sc">==</span><span class="st">"Current"</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(Treatment),</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> current_preds<span class="sc">$</span>.pred,</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># aplha components</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">K_alpha =</span> alpha_k,</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">mu_alpha =</span> alpha_m,</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">sigma_alpha =</span> alpha_s,</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">w_alpha =</span> alpha_w,</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>  <span class="co"># gamma componets</span></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">K_gamma =</span> beta_k,</span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">mu_gamma =</span> beta_m,</span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">sigma_gamma =</span> beta_s,</span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">w_gamma =</span> beta_w</span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a>fit_curmap_ps <span class="ot">&lt;-</span> mod_ps_mapcur<span class="sc">$</span><span class="fu">sample</span>(</span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> data_curr_ps,</span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">4</span>,</span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter_warmup =</span> <span class="dv">1000</span>,</span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter_sampling =</span> <span class="dv">2000</span>,</span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">123</span></span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running MCMC with 4 sequential chains...
+
+Chain 1 Iteration:    1 / 3000 [  0%]  (Warmup) 
+Chain 1 Iteration:  100 / 3000 [  3%]  (Warmup) 
+Chain 1 Iteration:  200 / 3000 [  6%]  (Warmup) 
+Chain 1 Iteration:  300 / 3000 [ 10%]  (Warmup) 
+Chain 1 Iteration:  400 / 3000 [ 13%]  (Warmup) 
+Chain 1 Iteration:  500 / 3000 [ 16%]  (Warmup) 
+Chain 1 Iteration:  600 / 3000 [ 20%]  (Warmup) 
+Chain 1 Iteration:  700 / 3000 [ 23%]  (Warmup) 
+Chain 1 Iteration:  800 / 3000 [ 26%]  (Warmup) 
+Chain 1 Iteration:  900 / 3000 [ 30%]  (Warmup) 
+Chain 1 Iteration: 1000 / 3000 [ 33%]  (Warmup) 
+Chain 1 Iteration: 1001 / 3000 [ 33%]  (Sampling) 
+Chain 1 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
+Chain 1 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
+Chain 1 Iteration: 1300 / 3000 [ 43%]  (Sampling) 
+Chain 1 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
+Chain 1 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
+Chain 1 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
+Chain 1 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
+Chain 1 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
+Chain 1 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
+Chain 1 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
+Chain 1 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
+Chain 1 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
+Chain 1 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
+Chain 1 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
+Chain 1 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
+Chain 1 Iteration: 2600 / 3000 [ 86%]  (Sampling) 
+Chain 1 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
+Chain 1 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
+Chain 1 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
+Chain 1 Iteration: 3000 / 3000 [100%]  (Sampling) 
+Chain 1 finished in 1.5 seconds.
+Chain 2 Iteration:    1 / 3000 [  0%]  (Warmup) 
+Chain 2 Iteration:  100 / 3000 [  3%]  (Warmup) 
+Chain 2 Iteration:  200 / 3000 [  6%]  (Warmup) 
+Chain 2 Iteration:  300 / 3000 [ 10%]  (Warmup) 
+Chain 2 Iteration:  400 / 3000 [ 13%]  (Warmup) 
+Chain 2 Iteration:  500 / 3000 [ 16%]  (Warmup) 
+Chain 2 Iteration:  600 / 3000 [ 20%]  (Warmup) 
+Chain 2 Iteration:  700 / 3000 [ 23%]  (Warmup) 
+Chain 2 Iteration:  800 / 3000 [ 26%]  (Warmup) 
+Chain 2 Iteration:  900 / 3000 [ 30%]  (Warmup) 
+Chain 2 Iteration: 1000 / 3000 [ 33%]  (Warmup) 
+Chain 2 Iteration: 1001 / 3000 [ 33%]  (Sampling) 
+Chain 2 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
+Chain 2 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
+Chain 2 Iteration: 1300 / 3000 [ 43%]  (Sampling) 
+Chain 2 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
+Chain 2 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
+Chain 2 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
+Chain 2 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
+Chain 2 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
+Chain 2 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
+Chain 2 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
+Chain 2 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
+Chain 2 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
+Chain 2 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
+Chain 2 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
+Chain 2 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
+Chain 2 Iteration: 2600 / 3000 [ 86%]  (Sampling) 
+Chain 2 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
+Chain 2 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
+Chain 2 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
+Chain 2 Iteration: 3000 / 3000 [100%]  (Sampling) 
+Chain 2 finished in 1.6 seconds.
+Chain 3 Iteration:    1 / 3000 [  0%]  (Warmup) 
+Chain 3 Iteration:  100 / 3000 [  3%]  (Warmup) 
+Chain 3 Iteration:  200 / 3000 [  6%]  (Warmup) 
+Chain 3 Iteration:  300 / 3000 [ 10%]  (Warmup) 
+Chain 3 Iteration:  400 / 3000 [ 13%]  (Warmup) 
+Chain 3 Iteration:  500 / 3000 [ 16%]  (Warmup) 
+Chain 3 Iteration:  600 / 3000 [ 20%]  (Warmup) 
+Chain 3 Iteration:  700 / 3000 [ 23%]  (Warmup) 
+Chain 3 Iteration:  800 / 3000 [ 26%]  (Warmup) 
+Chain 3 Iteration:  900 / 3000 [ 30%]  (Warmup) 
+Chain 3 Iteration: 1000 / 3000 [ 33%]  (Warmup) 
+Chain 3 Iteration: 1001 / 3000 [ 33%]  (Sampling) 
+Chain 3 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
+Chain 3 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
+Chain 3 Iteration: 1300 / 3000 [ 43%]  (Sampling) 
+Chain 3 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
+Chain 3 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
+Chain 3 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
+Chain 3 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
+Chain 3 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
+Chain 3 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
+Chain 3 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
+Chain 3 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
+Chain 3 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
+Chain 3 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
+Chain 3 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
+Chain 3 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
+Chain 3 Iteration: 2600 / 3000 [ 86%]  (Sampling) 
+Chain 3 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
+Chain 3 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
+Chain 3 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
+Chain 3 Iteration: 3000 / 3000 [100%]  (Sampling) 
+Chain 3 finished in 1.6 seconds.
+Chain 4 Iteration:    1 / 3000 [  0%]  (Warmup) 
+Chain 4 Iteration:  100 / 3000 [  3%]  (Warmup) 
+Chain 4 Iteration:  200 / 3000 [  6%]  (Warmup) 
+Chain 4 Iteration:  300 / 3000 [ 10%]  (Warmup) 
+Chain 4 Iteration:  400 / 3000 [ 13%]  (Warmup) 
+Chain 4 Iteration:  500 / 3000 [ 16%]  (Warmup) 
+Chain 4 Iteration:  600 / 3000 [ 20%]  (Warmup) 
+Chain 4 Iteration:  700 / 3000 [ 23%]  (Warmup) 
+Chain 4 Iteration:  800 / 3000 [ 26%]  (Warmup) 
+Chain 4 Iteration:  900 / 3000 [ 30%]  (Warmup) 
+Chain 4 Iteration: 1000 / 3000 [ 33%]  (Warmup) 
+Chain 4 Iteration: 1001 / 3000 [ 33%]  (Sampling) 
+Chain 4 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
+Chain 4 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
+Chain 4 Iteration: 1300 / 3000 [ 43%]  (Sampling) 
+Chain 4 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
+Chain 4 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
+Chain 4 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
+Chain 4 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
+Chain 4 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
+Chain 4 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
+Chain 4 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
+Chain 4 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
+Chain 4 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
+Chain 4 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
+Chain 4 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
+Chain 4 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
+Chain 4 Iteration: 2600 / 3000 [ 86%]  (Sampling) 
+Chain 4 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
+Chain 4 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
+Chain 4 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
+Chain 4 Iteration: 3000 / 3000 [100%]  (Sampling) 
+Chain 4 finished in 1.5 seconds.
+
+All 4 chains finished successfully.
+Mean chain execution time: 1.5 seconds.
+Total execution time: 7.9 seconds.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fit_curmap_ps<span class="sc">$</span><span class="fu">summary</span>() <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits=</span><span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 7%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">variable</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">median</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">mad</th>
+<th style="text-align: right;">q5</th>
+<th style="text-align: right;">q95</th>
+<th style="text-align: right;">rhat</th>
+<th style="text-align: right;">ess_bulk</th>
+<th style="text-align: right;">ess_tail</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">lp__</td>
+<td style="text-align: right;">-1101.6620</td>
+<td style="text-align: right;">-1101.3313</td>
+<td style="text-align: right;">1.5010</td>
+<td style="text-align: right;">1.2976</td>
+<td style="text-align: right;">-1104.5155</td>
+<td style="text-align: right;">-1099.9196</td>
+<td style="text-align: right;">1.0015</td>
+<td style="text-align: right;">3241.176</td>
+<td style="text-align: right;">4326.588</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">alpha</td>
+<td style="text-align: right;">-0.8188</td>
+<td style="text-align: right;">-0.8131</td>
+<td style="text-align: right;">0.3896</td>
+<td style="text-align: right;">0.3807</td>
+<td style="text-align: right;">-1.4645</td>
+<td style="text-align: right;">-0.1868</td>
+<td style="text-align: right;">1.0003</td>
+<td style="text-align: right;">4594.781</td>
+<td style="text-align: right;">4687.556</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">beta</td>
+<td style="text-align: right;">8.4014</td>
+<td style="text-align: right;">8.3971</td>
+<td style="text-align: right;">0.4792</td>
+<td style="text-align: right;">0.4825</td>
+<td style="text-align: right;">7.6216</td>
+<td style="text-align: right;">9.1858</td>
+<td style="text-align: right;">1.0004</td>
+<td style="text-align: right;">4927.339</td>
+<td style="text-align: right;">4806.271</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">gamma</td>
+<td style="text-align: right;">1.1049</td>
+<td style="text-align: right;">1.1044</td>
+<td style="text-align: right;">0.0218</td>
+<td style="text-align: right;">0.0198</td>
+<td style="text-align: right;">1.0707</td>
+<td style="text-align: right;">1.1416</td>
+<td style="text-align: right;">1.0014</td>
+<td style="text-align: right;">7064.113</td>
+<td style="text-align: right;">4088.892</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sigma_y</td>
+<td style="text-align: right;">5.4900</td>
+<td style="text-align: right;">5.4855</td>
+<td style="text-align: right;">0.1715</td>
+<td style="text-align: right;">0.1751</td>
+<td style="text-align: right;">5.2165</td>
+<td style="text-align: right;">5.7774</td>
+<td style="text-align: right;">1.0007</td>
+<td style="text-align: right;">7392.866</td>
+<td style="text-align: right;">5677.444</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <hr>
 </section>
 <section id="step-4-robustification" class="level1">
 <h1>Step 4: “Robustification”</h1>
 <p>The prior can then be robustified using the <code>RBesT</code> package to get the informative and the non informative components of the prior. Where an initial weight of the robust component is given as an argument of the function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rob_ps1 <span class="ot">&lt;-</span> <span class="fu">robustify</span>(mapize1, <span class="at">weight=</span><span class="fl">0.4</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sigma=</span><span class="dv">10</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>rob_ps2 <span class="ot">&lt;-</span> <span class="fu">robustify</span>(mapize2, <span class="at">weight=</span><span class="fl">0.4</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sigma=</span><span class="dv">10</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>alphar_m <span class="ot">&lt;-</span> rob_ps1[<span class="st">"m"</span>,]</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>alphar_s <span class="ot">&lt;-</span> rob_ps1[<span class="st">"s"</span>,]</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>alphar_w <span class="ot">&lt;-</span> rob_ps1[<span class="st">"w"</span>,]</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>alphar_k <span class="ot">&lt;-</span> <span class="fu">length</span>(alphar_m)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>betar_m <span class="ot">&lt;-</span> rob_ps2[<span class="st">"m"</span>,]</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>betar_s <span class="ot">&lt;-</span> rob_ps2[<span class="st">"s"</span>,]</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>betar_w <span class="ot">&lt;-</span> rob_ps2[<span class="st">"w"</span>,]</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>betar_k <span class="ot">&lt;-</span> <span class="fu">length</span>(betar_m)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <hr>
 </section>
 <section id="step-5-analysis-model-in-the-current-trial" class="level1">
@@ -563,6 +1131,268 @@ Y_i = \beta_0 + \beta_1w_i + \beta_2m_i + varepsilon_i
 \pi(\theta) = \omega \pi_1(\theta) + (1-\omega)\pi_0(\theta)
 \]</span></p>
 <p>where: <span class="math inline">\(\pi_1\)</span> is the informative prior (from the historical data) <span class="math inline">\(\pi_0\)</span> is the non informative (Vague) component.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>data_curr_ps2 <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> <span class="fu">length</span>(current_ml<span class="sc">$</span>Target),</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> current_ml<span class="sc">$</span>Target,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">trt =</span> all_data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Study<span class="sc">==</span><span class="st">"Current"</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(Treatment),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> current_preds<span class="sc">$</span>.pred,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># aplha components</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">K_alpha =</span> alphar_k,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">mu_alpha =</span> alphar_m,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sigma_alpha =</span> alphar_s,</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">w_alpha =</span> alphar_w,</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># gamma componets</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">K_gamma =</span> betar_k,</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">mu_gamma =</span> betar_m,</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">sigma_gamma =</span> betar_s,</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">w_gamma =</span> betar_w</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>fit_curRmap_ps <span class="ot">&lt;-</span> mod_ps_mapcur<span class="sc">$</span><span class="fu">sample</span>(</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> data_curr_ps2,</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">4</span>,</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter_warmup =</span> <span class="dv">1000</span>,</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter_sampling =</span> <span class="dv">2000</span>,</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">123</span></span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running MCMC with 4 sequential chains...
+
+Chain 1 Iteration:    1 / 3000 [  0%]  (Warmup) 
+Chain 1 Iteration:  100 / 3000 [  3%]  (Warmup) 
+Chain 1 Iteration:  200 / 3000 [  6%]  (Warmup) 
+Chain 1 Iteration:  300 / 3000 [ 10%]  (Warmup) 
+Chain 1 Iteration:  400 / 3000 [ 13%]  (Warmup) 
+Chain 1 Iteration:  500 / 3000 [ 16%]  (Warmup) 
+Chain 1 Iteration:  600 / 3000 [ 20%]  (Warmup) 
+Chain 1 Iteration:  700 / 3000 [ 23%]  (Warmup) 
+Chain 1 Iteration:  800 / 3000 [ 26%]  (Warmup) 
+Chain 1 Iteration:  900 / 3000 [ 30%]  (Warmup) 
+Chain 1 Iteration: 1000 / 3000 [ 33%]  (Warmup) 
+Chain 1 Iteration: 1001 / 3000 [ 33%]  (Sampling) 
+Chain 1 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
+Chain 1 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
+Chain 1 Iteration: 1300 / 3000 [ 43%]  (Sampling) 
+Chain 1 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
+Chain 1 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
+Chain 1 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
+Chain 1 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
+Chain 1 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
+Chain 1 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
+Chain 1 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
+Chain 1 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
+Chain 1 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
+Chain 1 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
+Chain 1 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
+Chain 1 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
+Chain 1 Iteration: 2600 / 3000 [ 86%]  (Sampling) 
+Chain 1 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
+Chain 1 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
+Chain 1 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
+Chain 1 Iteration: 3000 / 3000 [100%]  (Sampling) 
+Chain 1 finished in 1.6 seconds.
+Chain 2 Iteration:    1 / 3000 [  0%]  (Warmup) 
+Chain 2 Iteration:  100 / 3000 [  3%]  (Warmup) 
+Chain 2 Iteration:  200 / 3000 [  6%]  (Warmup) 
+Chain 2 Iteration:  300 / 3000 [ 10%]  (Warmup) 
+Chain 2 Iteration:  400 / 3000 [ 13%]  (Warmup) 
+Chain 2 Iteration:  500 / 3000 [ 16%]  (Warmup) 
+Chain 2 Iteration:  600 / 3000 [ 20%]  (Warmup) 
+Chain 2 Iteration:  700 / 3000 [ 23%]  (Warmup) 
+Chain 2 Iteration:  800 / 3000 [ 26%]  (Warmup) 
+Chain 2 Iteration:  900 / 3000 [ 30%]  (Warmup) 
+Chain 2 Iteration: 1000 / 3000 [ 33%]  (Warmup) 
+Chain 2 Iteration: 1001 / 3000 [ 33%]  (Sampling) 
+Chain 2 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
+Chain 2 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
+Chain 2 Iteration: 1300 / 3000 [ 43%]  (Sampling) 
+Chain 2 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
+Chain 2 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
+Chain 2 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
+Chain 2 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
+Chain 2 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
+Chain 2 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
+Chain 2 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
+Chain 2 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
+Chain 2 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
+Chain 2 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
+Chain 2 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
+Chain 2 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
+Chain 2 Iteration: 2600 / 3000 [ 86%]  (Sampling) 
+Chain 2 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
+Chain 2 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
+Chain 2 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
+Chain 2 Iteration: 3000 / 3000 [100%]  (Sampling) 
+Chain 2 finished in 1.6 seconds.
+Chain 3 Iteration:    1 / 3000 [  0%]  (Warmup) 
+Chain 3 Iteration:  100 / 3000 [  3%]  (Warmup) 
+Chain 3 Iteration:  200 / 3000 [  6%]  (Warmup) 
+Chain 3 Iteration:  300 / 3000 [ 10%]  (Warmup) 
+Chain 3 Iteration:  400 / 3000 [ 13%]  (Warmup) 
+Chain 3 Iteration:  500 / 3000 [ 16%]  (Warmup) 
+Chain 3 Iteration:  600 / 3000 [ 20%]  (Warmup) 
+Chain 3 Iteration:  700 / 3000 [ 23%]  (Warmup) 
+Chain 3 Iteration:  800 / 3000 [ 26%]  (Warmup) 
+Chain 3 Iteration:  900 / 3000 [ 30%]  (Warmup) 
+Chain 3 Iteration: 1000 / 3000 [ 33%]  (Warmup) 
+Chain 3 Iteration: 1001 / 3000 [ 33%]  (Sampling) 
+Chain 3 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
+Chain 3 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
+Chain 3 Iteration: 1300 / 3000 [ 43%]  (Sampling) 
+Chain 3 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
+Chain 3 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
+Chain 3 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
+Chain 3 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
+Chain 3 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
+Chain 3 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
+Chain 3 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
+Chain 3 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
+Chain 3 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
+Chain 3 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
+Chain 3 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
+Chain 3 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
+Chain 3 Iteration: 2600 / 3000 [ 86%]  (Sampling) 
+Chain 3 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
+Chain 3 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
+Chain 3 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
+Chain 3 Iteration: 3000 / 3000 [100%]  (Sampling) 
+Chain 3 finished in 1.7 seconds.
+Chain 4 Iteration:    1 / 3000 [  0%]  (Warmup) 
+Chain 4 Iteration:  100 / 3000 [  3%]  (Warmup) 
+Chain 4 Iteration:  200 / 3000 [  6%]  (Warmup) 
+Chain 4 Iteration:  300 / 3000 [ 10%]  (Warmup) 
+Chain 4 Iteration:  400 / 3000 [ 13%]  (Warmup) 
+Chain 4 Iteration:  500 / 3000 [ 16%]  (Warmup) 
+Chain 4 Iteration:  600 / 3000 [ 20%]  (Warmup) 
+Chain 4 Iteration:  700 / 3000 [ 23%]  (Warmup) 
+Chain 4 Iteration:  800 / 3000 [ 26%]  (Warmup) 
+Chain 4 Iteration:  900 / 3000 [ 30%]  (Warmup) 
+Chain 4 Iteration: 1000 / 3000 [ 33%]  (Warmup) 
+Chain 4 Iteration: 1001 / 3000 [ 33%]  (Sampling) 
+Chain 4 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
+Chain 4 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
+Chain 4 Iteration: 1300 / 3000 [ 43%]  (Sampling) 
+Chain 4 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
+Chain 4 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
+Chain 4 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
+Chain 4 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
+Chain 4 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
+Chain 4 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
+Chain 4 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
+Chain 4 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
+Chain 4 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
+Chain 4 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
+Chain 4 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
+Chain 4 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
+Chain 4 Iteration: 2600 / 3000 [ 86%]  (Sampling) 
+Chain 4 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
+Chain 4 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
+Chain 4 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
+Chain 4 Iteration: 3000 / 3000 [100%]  (Sampling) 
+Chain 4 finished in 1.6 seconds.
+
+All 4 chains finished successfully.
+Mean chain execution time: 1.6 seconds.
+Total execution time: 8.2 seconds.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fit_curRmap_ps<span class="sc">$</span><span class="fu">summary</span>() <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits=</span><span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 7%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">variable</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">median</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">mad</th>
+<th style="text-align: right;">q5</th>
+<th style="text-align: right;">q95</th>
+<th style="text-align: right;">rhat</th>
+<th style="text-align: right;">ess_bulk</th>
+<th style="text-align: right;">ess_tail</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">lp__</td>
+<td style="text-align: right;">-1102.5929</td>
+<td style="text-align: right;">-1102.2578</td>
+<td style="text-align: right;">1.4748</td>
+<td style="text-align: right;">1.2521</td>
+<td style="text-align: right;">-1105.5278</td>
+<td style="text-align: right;">-1100.8692</td>
+<td style="text-align: right;">1.0016</td>
+<td style="text-align: right;">3394.140</td>
+<td style="text-align: right;">4232.146</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">alpha</td>
+<td style="text-align: right;">-0.8215</td>
+<td style="text-align: right;">-0.8149</td>
+<td style="text-align: right;">0.3955</td>
+<td style="text-align: right;">0.3936</td>
+<td style="text-align: right;">-1.4819</td>
+<td style="text-align: right;">-0.1851</td>
+<td style="text-align: right;">1.0009</td>
+<td style="text-align: right;">4328.948</td>
+<td style="text-align: right;">4818.941</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">beta</td>
+<td style="text-align: right;">8.4096</td>
+<td style="text-align: right;">8.4001</td>
+<td style="text-align: right;">0.4838</td>
+<td style="text-align: right;">0.4819</td>
+<td style="text-align: right;">7.6285</td>
+<td style="text-align: right;">9.2124</td>
+<td style="text-align: right;">1.0004</td>
+<td style="text-align: right;">4633.700</td>
+<td style="text-align: right;">4817.940</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">gamma</td>
+<td style="text-align: right;">1.1046</td>
+<td style="text-align: right;">1.1042</td>
+<td style="text-align: right;">0.0210</td>
+<td style="text-align: right;">0.0188</td>
+<td style="text-align: right;">1.0721</td>
+<td style="text-align: right;">1.1404</td>
+<td style="text-align: right;">1.0000</td>
+<td style="text-align: right;">6612.932</td>
+<td style="text-align: right;">4204.980</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sigma_y</td>
+<td style="text-align: right;">5.4869</td>
+<td style="text-align: right;">5.4808</td>
+<td style="text-align: right;">0.1719</td>
+<td style="text-align: right;">0.1722</td>
+<td style="text-align: right;">5.2160</td>
+<td style="text-align: right;">5.7753</td>
+<td style="text-align: right;">1.0014</td>
+<td style="text-align: right;">6856.013</td>
+<td style="text-align: right;">5411.885</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </section>
 
 </main>

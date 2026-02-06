@@ -288,7 +288,7 @@ be the pooled historical control dataset. The structure of the data is:
 ```{r}
 #| message: false
 #| warning: false
-samp <- all_data %>% select(Study, Treatment, Target, Lab_1, Lab_2, Bio_1) 
+samp <- all_data %>% dplyr::select(Study, Treatment, Target, Lab_1, Lab_2, Bio_1) 
 knitr::kable(samp[sample(nrow(samp), 10), ], caption = "Sample of Pooled data")
 
 ```
@@ -326,7 +326,78 @@ $$
 ## R: Fit Random Forest Prognostic Model
 
 ```{r}
+library(tidymodels)
 
+hist_df <- all_data %>% 
+  filter(Study!="Current") %>% 
+  dplyr::select(-Treatment)
+
+# split into test and training sets
+
+Split <- initial_split(hist_df, prop = 0.75, strata = Study)
+
+train_df <- training(Split)
+test_df <- testing(Split)
+
+# v fold CV
+
+folds <- vfold_cv(train_df, v = 5, strata = Study)
+
+# recipe
+
+rec <- recipe(Target ~ ., data = train_df) %>%
+  step_zv(all_predictors()) %>%      # remove zero-variance columns
+  step_normalize(all_numeric_predictors()) %>% 
+  step_dummy(Study)
+
+
+# model specification
+
+rf_model <- rand_forest(
+  trees = 500,
+  mtry = tune(),
+  min_n = tune()
+) %>%
+  set_engine("ranger") %>%
+  set_mode("regression")
+
+wf <- workflow() %>%
+  add_recipe(rec) %>%
+  add_model(rf_model)
+
+rf_grid <- grid_regular(
+  mtry(range = c(5, 30)),
+  min_n(range = c(2, 20)),
+  levels = 5
+)
+
+
+
+tuned_results <- tune_grid(
+  wf,
+  resamples = folds,
+  grid = rf_grid,
+  metrics = metric_set(rmse, rsq)
+)
+
+
+best_params <- select_best(tuned_results, metric = "rmse")
+
+best_params
+
+
+final_wf <- finalize_workflow(wf, best_params)
+
+# fit 
+
+final_fit <- fit(final_wf, data = train_df)
+
+# Evaluating model
+
+test_preds <- predict(final_fit, test_df) %>%
+  bind_cols(test_df)
+
+metrics(test_preds, truth = Target, estimate = .pred)
 
 
 ```
@@ -367,6 +438,21 @@ Compute the prognostic scores as follows:
 So that every patient (regardless of where s(he) belongs) has $m_i$,
 \[prognostic score\]
 
+```{r}
+current_ml <- current_trial %>%
+  dplyr::select(-Treatment)
+
+hist_pred <- predict(final_fit, hist_df)
+
+current_preds <- predict(final_fit, current_ml)
+
+
+# the new data
+
+
+
+```
+
 ------------------------------------------------------------------------
 
 # Step 3 Build the MAP prior (Informative component)
@@ -385,6 +471,89 @@ These are combined across studies using MAP to get the $MAP$ prior. And
 can be converted to a mixture of conjugate distributions
 using`automixfit` function from the `RBesT` package.
 
+```{r}
+#| message: false
+#| warning: false
+#hist_df2 <- data.frame(outcome=hist_df$Target, pred=hist_pred)
+
+# the map model
+
+library(cmdstanr)
+hist_data <- list(
+  N = length(hist_df$Target),
+  J = length(unique(as.numeric(gsub("[^0-9]", "", hist_df$Study)))),
+  trial = as.numeric(gsub("[^0-9]", "", hist_df$Study)),
+  x = hist_pred$.pred,
+  y = hist_df$Target
+)
+
+
+mod_ps <- cmdstan_model("borrowing_on_ps.stan")
+
+fit_hist_ps <- mod_ps$sample(
+  data = hist_data,
+  chains = 4,
+  iter_warmup = 1000,
+  iter_sampling = 2000,
+  seed = 123
+)
+
+library(RBesT)
+
+#fit_hist_ps$summary()
+
+theta1_draw <- fit_hist_ps$draws("theta_new[1]")|>as.numeric()
+theta2_draw <- fit_hist_ps$draws("theta_new[2]")|>as.numeric()
+
+mapize1 <- automixfit(theta1_draw, Nc=1:10)
+
+# intercept
+alpha_m <- mapize1["m",]
+alpha_s <- mapize1["s",]
+alpha_w <- mapize1["w",]
+alpha_k <- length(alpha_m)
+
+# covariate
+mapize2 <- automixfit(theta2_draw, Nc=1:10)
+beta_m <- mapize2["m",]
+beta_s <- mapize2["s",]
+beta_w <- mapize2["w",]
+beta_k <- length(beta_m)
+# Apply it to the current data
+
+mod_ps_mapcur <- cmdstan_model("current_trial_with_ps.stan")
+
+data_curr_ps <- list(
+  N = length(current_ml$Target),
+  y = current_ml$Target,
+  trt = all_data %>% filter(Study=="Current") %>% pull(Treatment),
+  x = current_preds$.pred,
+  
+  # aplha components
+  K_alpha = alpha_k,
+  mu_alpha = alpha_m,
+  sigma_alpha = alpha_s,
+  w_alpha = alpha_w,
+  
+  # gamma componets
+  K_gamma = beta_k,
+  mu_gamma = beta_m,
+  sigma_gamma = beta_s,
+  w_gamma = beta_w
+)
+
+fit_curmap_ps <- mod_ps_mapcur$sample(
+  data = data_curr_ps,
+  chains = 4,
+  iter_warmup = 1000,
+  iter_sampling = 2000,
+  seed = 123
+)
+
+
+fit_curmap_ps$summary() %>% knitr::kable(digits=4)
+```
+
 ------------------------------------------------------------------------
 
 # Step 4: "Robustification"
@@ -393,6 +562,29 @@ The prior can then be robustified using the `RBesT` package to get the
 informative and the non informative components of the prior. Where an
 initial weight of the robust component is given as an argument of the
 function.
+
+
+```{r}
+#| message: false
+#| warning: false
+rob_ps1 <- robustify(mapize1, weight=0.4, mean=0, sigma=10)
+rob_ps2 <- robustify(mapize2, weight=0.4, mean=0, sigma=10)
+
+alphar_m <- rob_ps1["m",]
+alphar_s <- rob_ps1["s",]
+alphar_w <- rob_ps1["w",]
+alphar_k <- length(alphar_m)
+
+betar_m <- rob_ps2["m",]
+betar_s <- rob_ps2["s",]
+betar_w <- rob_ps2["w",]
+betar_k <- length(betar_m)
+
+
+
+
+
+```
 
 ------------------------------------------------------------------------
 
@@ -412,3 +604,42 @@ $$
 
 where: $\pi_1$ is the informative prior (from the historical data)
 $\pi_0$ is the non informative (Vague) component.
+
+
+```{r}
+#| message: false
+#| warning: false
+data_curr_ps2 <- list(
+  N = length(current_ml$Target),
+  y = current_ml$Target,
+  trt = all_data %>% filter(Study=="Current") %>% pull(Treatment),
+  x = current_preds$.pred,
+  
+  # aplha components
+  K_alpha = alphar_k,
+  mu_alpha = alphar_m,
+  sigma_alpha = alphar_s,
+  w_alpha = alphar_w,
+  
+  # gamma componets
+  K_gamma = betar_k,
+  mu_gamma = betar_m,
+  sigma_gamma = betar_s,
+  w_gamma = betar_w
+)
+
+
+fit_curRmap_ps <- mod_ps_mapcur$sample(
+  data = data_curr_ps2,
+  chains = 4,
+  iter_warmup = 1000,
+  iter_sampling = 2000,
+  seed = 123
+)
+
+
+fit_curRmap_ps$summary() %>% knitr::kable(digits=4)
+
+
+
+```
