@@ -490,6 +490,23 @@ hist_data <- list(
 
 mod_ps <- cmdstan_model("borrowing_on_ps.stan")
 
+
+```
+
+
+The `stan` code for inspection
+
+```{r}
+mod_ps
+
+```
+
+
+
+
+```{r}
+
+
 fit_hist_ps <- mod_ps$sample(
   data = hist_data,
   chains = 4,
@@ -519,9 +536,22 @@ beta_m <- mapize2["m",]
 beta_s <- mapize2["s",]
 beta_w <- mapize2["w",]
 beta_k <- length(beta_m)
-# Apply it to the current data
+
 
 mod_ps_mapcur <- cmdstan_model("current_trial_with_ps.stan")
+
+```
+
+
+The `STAN` code for inspection
+
+```{r}
+mod_ps_mapcur
+```
+
+```{r}
+# Apply it to the current data
+
 
 data_curr_ps <- list(
   N = length(current_ml$Target),
@@ -579,8 +609,6 @@ betar_m <- rob_ps2["m",]
 betar_s <- rob_ps2["s",]
 betar_w <- rob_ps2["w",]
 betar_k <- length(betar_m)
-
-
 
 
 
