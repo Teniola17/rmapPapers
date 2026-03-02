@@ -474,6 +474,7 @@ using`automixfit` function from the `RBesT` package.
 ```{r}
 #| message: false
 #| warning: false
+
 #hist_df2 <- data.frame(outcome=hist_df$Target, pred=hist_pred)
 
 # the map model
@@ -550,6 +551,9 @@ mod_ps_mapcur
 ```
 
 ```{r}
+#| message: false
+#| warning: false
+#| include: false
 # Apply it to the current data
 
 
@@ -581,7 +585,14 @@ fit_curmap_ps <- mod_ps_mapcur$sample(
 )
 
 
-fit_curmap_ps$summary() %>% knitr::kable(digits=4)
+```
+
+
+```{r}
+
+
+fit_curmap_ps$summary() %>% knitr::kable(digits=4, caption = "Result for the MAP prior, when applied to the current trial")
+
 ```
 
 ------------------------------------------------------------------------
@@ -637,6 +648,7 @@ $\pi_0$ is the non informative (Vague) component.
 ```{r}
 #| message: false
 #| warning: false
+#| include: false
 data_curr_ps2 <- list(
   N = length(current_ml$Target),
   y = current_ml$Target,
@@ -665,9 +677,12 @@ fit_curRmap_ps <- mod_ps_mapcur$sample(
   seed = 123
 )
 
+```
 
-fit_curRmap_ps$summary() %>% knitr::kable(digits=4)
+
+```{r}
 
 
+fit_curRmap_ps$summary() %>% knitr::kable(digits=4, caption = "Robust MAP prior result")
 
 ```
