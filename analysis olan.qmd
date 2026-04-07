@@ -1,0 +1,794 @@
+---
+title: "SImulation plan"
+format: pdf
+editor: visual
+---
+
+
+
+
+
+
+
+# Simulation Plan for Bayesian Borrowing with Time-Dependent Historical Controls
+
+## 1. Purpose of the Simulation Study
+
+This document sets out a simulation plan for evaluating Bayesian borrowing methods for a randomized clinical trial with a continuous endpoint when patient-level data are available from multiple historical control studies. The focus is on settings where the historical control mean may drift over time. The simulation will compare methods that ignore drift, partially account for drift, or explicitly model temporal dependence.
+
+The main aims are:
+
+1. To assess bias, precision, interval estimation, and decision performance for the treatment effect when borrowing historical information.
+2. To evaluate robustness of competing borrowing methods under no drift, mild drift, and substantial drift.
+3. To study the effect of covariate imbalance and outcome-model misspecification on borrowing performance.
+4. To estimate marginal treatment and control means using g-computation and then obtain the marginal treatment effect.
+
+---
+
+## 2. Overall Trial Setting
+
+We consider:
+
+- **H = 4 historical studies**, each containing only control-arm patients.
+- **One current randomized trial** with both treatment and control arms.
+- **Continuous outcome**.
+- **Patient-level baseline covariates** available for all studies.
+- The estimand is defined for the **current trial population**.
+
+Let:
+
+- \(h = 1,\dots,H\) index the historical studies.
+- \(s = H+1\) denote the current study.
+- \(i\) index individuals within a study.
+- \(A_{si} \in \{0,1\}\) be treatment assignment in the current trial, where 1 = treatment and 0 = control.
+- \(X_{si}\) be the baseline covariate vector.
+- \(Y_{si}\) be the continuous outcome.
+
+The historical studies contain only \((Y_{hi}, X_{hi})\) for controls.
+
+---
+
+## 3. Target Estimands
+
+The estimands are marginal means under the covariate distribution of the **current trial population**:
+
+\[
+\mu_T = E\{Y(1) \mid S = H+1\}, \qquad
+\mu_C = E\{Y(0) \mid S = H+1\},
+\]
+
+and the marginal treatment effect:
+
+\[
+\Delta = \mu_T - \mu_C.
+\]
+
+These will be estimated using posterior g-computation:
+
+\[
+\mu_T = \frac{1}{n_{\text{cur}}} \sum_{i=1}^{n_{\text{cur}}} E(Y \mid A=1, X=X_i, \Theta),
+\]
+
+\[
+\mu_C = \frac{1}{n_{\text{cur}}} \sum_{i=1}^{n_{\text{cur}}} E(Y \mid A=0, X=X_i, \Theta),
+\]
+
+where \(\Theta\) denotes the model parameters and the averaging is over the observed covariate distribution in the current trial.
+
+---
+
+## 4. Data-Generating Mechanism
+
+### 4.1 Baseline Covariates
+
+To reflect a realistic mixture of covariates, let \(p=4\):
+
+- \(X_1 \sim N(0,1)\)
+- \(X_2 \sim \text{Bernoulli}(0.5)\)
+- \(X_3 \sim N(0,1)\)
+- \(X_4 \sim \text{Bernoulli}(0.4)\)
+
+independently unless otherwise stated.
+
+A sensitivity analysis may replace the independent structure with correlated continuous covariates:
+
+\[
+(X_1, X_3)^\top \sim N_2\left(
+\begin{pmatrix}0\\0\end{pmatrix},
+\begin{pmatrix}1 & \rho \\\rho & 1\end{pmatrix}
+\right),
+\]
+
+with \(\rho = 0.3\).
+
+### 4.2 Outcome Model Used for Data Generation
+
+For individual \(i\) in study \(j\), generate outcomes from
+
+\[
+Y_{ji} = \alpha_j + \tau A_{ji} + X_{ji}^\top \beta + \varepsilon_{ji},
+\qquad \varepsilon_{ji} \sim N(0, \sigma^2).
+\]
+
+Here:
+
+- \(\alpha_j\) is the study-specific intercept capturing the study-level control mean after covariate adjustment.
+- \(\tau\) is the treatment effect in the current trial only.
+- \(\beta\) are common prognostic effects.
+- \(\sigma^2\) is the residual variance.
+
+For historical studies, \(A_{hi}=0\) for all individuals. For the current trial, \(A_{si}\sim \text{Bernoulli}(0.5)\).
+
+### 4.3 Parameterization of the True Outcome Model
+
+A practical baseline parameterization is:
+
+\[
+\beta = (0.6, -0.5, 0.4, -0.3)^\top,
+\qquad \sigma = 1.
+\]
+
+The true treatment effect may be set to:
+
+- **Null scenario**: \(\tau = 0\)
+- **Beneficial treatment scenario**: \(\tau = -0.3\)
+- **Moderate beneficial effect**: \(\tau = -0.5\)
+
+assuming smaller values are better. If larger values are better, the signs can be reversed.
+
+### 4.4 Time-Dependent Control Mean Structure
+
+The historical studies are assumed ordered in time. Let \(\alpha_1,\dots,\alpha_H,\alpha_{H+1}\) denote the adjusted control intercepts for the historical and current studies.
+
+#### Scenario A: No drift
+
+\[
+\alpha_j = 0 \quad \text{for all } j=1,\dots,H+1.
+\]
+
+#### Scenario B: Linear drift
+
+\[
+\alpha_j = \delta_0 + \delta_1(j-1),
+\]
+
+with, for example, \(\delta_0=0\) and \(\delta_1=0.15\).
+
+#### Scenario C: Step change near the current trial
+
+\[
+\alpha_1 = 0,\quad \alpha_2 = 0,\quad \alpha_3 = 0.2,\quad \alpha_4 = 0.4,\quad \alpha_5 = 0.7.
+\]
+
+#### Scenario D: AR(1) drift
+
+\[
+\alpha_1 \sim N(0, \omega^2/(1-\phi^2)),
+\qquad
+\alpha_j \mid \alpha_{j-1} \sim N(\phi \alpha_{j-1}, \omega^2), \; j=2,\dots,H+1.
+\]
+
+Suggested values:
+
+- Mild dependence: \(\phi = 0.5\), \(\omega = 0.15\)
+- Strong dependence: \(\phi = 0.8\), \(\omega = 0.10\)
+
+This AR(1) structure will be especially useful when evaluating time-dependent priors.
+
+---
+
+## 5. Sample Size Settings
+
+A default sample-size design is:
+
+- Historical studies: \(n_h \in \{80,80,80,80\}\) or \(\{50,100,150,200\}\)
+- Current control: \(n_{C,\text{cur}} = 100\)
+- Current treatment: \(n_{T,\text{cur}} = 100\)
+
+Sensitivity analyses may consider a smaller current trial, for example:
+
+- Current control = 50
+- Current treatment = 50
+
+This is important because borrowing is usually more influential when the current trial is small.
+
+---
+
+## 6. Competing Analysis Methods
+
+The following methods will be compared.
+
+### 6.1 No Borrowing
+
+Fit the model using only current-trial data:
+
+\[
+Y_i = \alpha_{\text{cur}} + \tau A_i + X_i^\top \beta + \varepsilon_i.
+\]
+
+This provides the benchmark with no external information.
+
+### 6.2 Full Borrowing (Pooled Controls)
+
+Pool all historical controls with the current control under a common control intercept:
+
+\[
+Y_i = \alpha + \tau A_i + X_i^\top \beta + \varepsilon_i.
+\]
+
+This method is efficient under no drift but can perform poorly when drift is present.
+
+### 6.3 Hierarchical Exchangeability Model
+
+Allow study-specific intercepts but assume exchangeability:
+
+\[
+\alpha_j \sim N(\mu_\alpha, \tau_\alpha^2), \qquad j=1,\dots,H+1.
+\]
+
+This permits partial borrowing across studies without explicit time ordering.
+
+### 6.4 AR(1) Time-Dependent Prior
+
+Assume the study-specific intercepts evolve over time:
+
+\[
+\alpha_1 \sim N(m_0, s_0^2),
+\qquad
+\alpha_j \mid \alpha_{j-1} \sim N(\phi \alpha_{j-1}, \omega^2), \; j=2,\dots,H+1.
+\]
+
+This is the main time-dependent borrowing model.
+
+### 6.5 Power Prior
+
+Use the historical likelihood contribution with downweighting parameters \(a_h \in [0,1]\):
+
+\[
+\pi(\Theta \mid D_1,\dots,D_H,D_{\text{cur}})
+\propto
+\left\{\prod_{h=1}^{H} L(\Theta \mid D_h)^{a_h}\right\} L(\Theta \mid D_{\text{cur}})\pi_0(\Theta).
+\]
+
+Two implementations can be considered:
+
+1. **Fixed power prior**, e.g. \(a_h = 0.5\) or decreasing with age of the study.
+2. **Normalized random power prior**, e.g. \(a_h \sim \text{Beta}(c_1,c_2)\).
+
+A simple time-sensitive choice is:
+
+\[
+a_h = \exp\{-\lambda(H+1-h)\},
+\]
+
+with \(\lambda > 0\), so older studies receive less weight.
+
+---
+
+## 7. Bayesian Analysis Model Used for G-Computation
+
+A convenient unified analysis model is:
+
+\[
+Y_{ji} \sim N(\alpha_j + \tau \, I(j=H+1)A_{ji} + X_{ji}^\top \beta, \sigma^2).
+\]
+
+The difference between methods lies mainly in the prior structure assigned to \(\alpha_j\).
+
+### 7.1 Prior Specification
+
+A weakly informative prior specification is:
+
+\[
+\tau \sim N(0, 2^2), \qquad \beta_k \sim N(0, 2^2), \qquad \sigma \sim \text{half-Normal}(0, 1.5).
+\]
+
+For the hierarchical model:
+
+\[
+\mu_\alpha \sim N(0, 2^2),
+\qquad
+\tau_\alpha \sim \text{half-Normal}(0,1).
+\]
+
+For the AR(1) model:
+
+\[
+m_0 \sim N(0,2^2),
+\qquad
+s_0 \sim \text{half-Normal}(0,1),
+\qquad
+\phi \sim \text{Uniform}(-1,1),
+\qquad
+\omega \sim \text{half-Normal}(0,1).
+\]
+
+A more stable alternative for \(\phi\) in Stan is to estimate an unconstrained parameter and transform it to \((-1,1)\).
+
+---
+
+## 8. Simulation Scenarios
+
+The simulation factors may include:
+
+1. **Drift pattern**
+   - None
+   - Linear drift
+   - Step change
+   - AR(1) drift
+
+2. **Treatment effect**
+   - \(\tau = 0\)
+   - \(\tau = -0.3\)
+   - \(\tau = -0.5\)
+
+3. **Current sample size**
+   - 100 + 100
+   - 50 + 50
+
+4. **Historical sample-size balance**
+   - Equal sizes
+   - Unequal sizes
+
+5. **Covariate distribution shift between historical and current studies**
+   - None
+   - Mild shift, e.g. \(P(X_2=1)\) changes from 0.5 to 0.65 in the current trial
+
+6. **Outcome-model misspecification**
+   - Correct linear model
+   - Omitted interaction, e.g. \(0.3X_1X_2\) added in generation but not in fitting
+
+---
+
+## 9. Performance Measures
+
+For each method and scenario, evaluate:
+
+1. **Bias** of \(\hat\mu_T\), \(\hat\mu_C\), and \(\hat\Delta\)
+2. **Empirical standard deviation**
+3. **Mean posterior standard deviation**
+4. **Root mean squared error (RMSE)**
+5. **95% credible interval coverage**
+6. **Average credible interval width**
+7. **Posterior probability of benefit**, e.g.
+   \[
+   P(\Delta < 0 \mid \text{data})
+   \]
+   when smaller outcomes are better
+8. **Type I error / false positive rate** under \(\tau=0\)
+9. **Power** under \(\tau < 0\)
+
+A decision rule may be:
+
+\[
+\text{Declare efficacy if } P(\Delta < 0 \mid \text{data}) > 0.975.
+\]
+
+---
+
+## 10. Monte Carlo Design
+
+For each scenario:
+
+1. Generate covariates and outcomes for the 4 historical studies and the current trial.
+2. Fit each Bayesian analysis model.
+3. Draw posterior samples for model parameters.
+4. Compute posterior g-computation estimates of \(\mu_T\), \(\mu_C\), and \(\Delta\).
+5. Store point estimates, interval estimates, and decision indicators.
+6. Repeat for \(R\) simulated datasets.
+
+A suitable starting choice is:
+
+- \(R = 1000\) Monte Carlo replicates for final results
+- 2 to 4 chains
+- 1000 warmup + 1000 sampling iterations per chain
+
+For pilot runs, use smaller \(R\) and fewer iterations.
+
+---
+
+## 11. Suggested Stan Parameterization
+
+To improve computation, it is useful to center and scale continuous covariates before fitting the models. For hierarchical and AR(1) models, a non-centered parameterization is preferred.
+
+### 11.1 Non-centered hierarchical intercepts
+
+Instead of sampling
+
+\[
+\alpha_j \sim N(\mu_\alpha, \tau_\alpha^2),
+\]
+
+sample
+
+\[
+z_j \sim N(0,1), \qquad \alpha_j = \mu_\alpha + \tau_\alpha z_j.
+\]
+
+### 11.2 Transformed AR(1) coefficient
+
+Sample \(\eta_\phi \in \mathbb{R}\) and define
+
+\[
+\phi = 2\,\mathrm{inv\_logit}(\eta_\phi)-1.
+\]
+
+In Stan, this can be written using `inv_logit`.
+
+---
+
+## 12. Stan Code: No Borrowing Model
+
+```stan
+data {
+  int<lower=1> N;
+  int<lower=1> P;
+  matrix[N, P] X;
+  vector[N] y;
+  array[N] int<lower=0, upper=1> A;
+}
+parameters {
+  real alpha;
+  real tau;
+  vector[P] beta;
+  real<lower=0> sigma;
+}
+model {
+  alpha ~ normal(0, 2);
+  tau   ~ normal(0, 2);
+  beta  ~ normal(0, 2);
+  sigma ~ normal(0, 1.5);
+
+  y ~ normal(alpha + tau * to_vector(A) + X * beta, sigma);
+}
+generated quantities {
+  vector[N] mu1;
+  vector[N] mu0;
+  real muT;
+  real muC;
+  real Delta;
+
+  mu1 = alpha + tau * rep_vector(1, N) + X * beta;
+  mu0 = alpha + X * beta;
+  muT = mean(mu1);
+  muC = mean(mu0);
+  Delta = muT - muC;
+}
+```
+
+---
+
+## 13. Stan Code: Full Borrowing (Pooled Controls)
+
+```stan
+data {
+  int<lower=1> N;
+  int<lower=1> P;
+  int<lower=1> S;
+  matrix[N, P] X;
+  vector[N] y;
+  array[N] int<lower=1, upper=S> study;
+  array[N] int<lower=0, upper=1> current;
+  array[N] int<lower=0, upper=1> A;
+}
+parameters {
+  real alpha;
+  real tau;
+  vector[P] beta;
+  real<lower=0> sigma;
+}
+model {
+  alpha ~ normal(0, 2);
+  tau   ~ normal(0, 2);
+  beta  ~ normal(0, 2);
+  sigma ~ normal(0, 1.5);
+
+  for (n in 1:N) {
+    y[n] ~ normal(alpha + tau * current[n] * A[n] + X[n] * beta, sigma);
+  }
+}
+```
+
+This model pools all controls through a common intercept `alpha`.
+
+---
+
+## 14. Stan Code: Hierarchical Exchangeability Model
+
+```stan
+data {
+  int<lower=1> N;
+  int<lower=1> P;
+  int<lower=1> S;                 // 4 historical + current = 5
+  int<lower=1> Ncur;              // current trial sample size
+  matrix[N, P] X;
+  vector[N] y;
+  array[N] int<lower=1, upper=S> study;
+  array[N] int<lower=0, upper=1> current;
+  array[N] int<lower=0, upper=1> A;
+  matrix[Ncur, P] Xcur;
+}
+parameters {
+  real mu_alpha;
+  real<lower=0> sigma_alpha;
+  vector[S] z_alpha;
+  real tau;
+  vector[P] beta;
+  real<lower=0> sigma;
+}
+transformed parameters {
+  vector[S] alpha;
+  alpha = mu_alpha + sigma_alpha * z_alpha;
+}
+model {
+  mu_alpha    ~ normal(0, 2);
+  sigma_alpha ~ normal(0, 1);
+  z_alpha     ~ normal(0, 1);
+  tau         ~ normal(0, 2);
+  beta        ~ normal(0, 2);
+  sigma       ~ normal(0, 1.5);
+
+  for (n in 1:N) {
+    y[n] ~ normal(alpha[study[n]] + tau * current[n] * A[n] + X[n] * beta, sigma);
+  }
+}
+generated quantities {
+  vector[Ncur] mu1;
+  vector[Ncur] mu0;
+  real muT;
+  real muC;
+  real Delta;
+
+  mu1 = alpha[S] + tau * rep_vector(1, Ncur) + Xcur * beta;
+  mu0 = alpha[S] + Xcur * beta;
+  muT = mean(mu1);
+  muC = mean(mu0);
+  Delta = muT - muC;
+}
+```
+
+---
+
+## 15. Stan Code: AR(1) Time-Dependent Borrowing Model
+
+```stan
+data {
+  int<lower=1> N;
+  int<lower=1> P;
+  int<lower=1> S;                 // ordered studies, S = 5
+  int<lower=1> Ncur;
+  matrix[N, P] X;
+  vector[N] y;
+  array[N] int<lower=1, upper=S> study;
+  array[N] int<lower=0, upper=1> current;
+  array[N] int<lower=0, upper=1> A;
+  matrix[Ncur, P] Xcur;
+}
+parameters {
+  real m0;
+  real<lower=0> s0;
+  real eta_phi;
+  real<lower=0> omega;
+  vector[S] alpha;
+  real tau;
+  vector[P] beta;
+  real<lower=0> sigma;
+}
+transformed parameters {
+  real phi;
+  phi = 2 * inv_logit(eta_phi) - 1;
+}
+model {
+  m0    ~ normal(0, 2);
+  s0    ~ normal(0, 1);
+  eta_phi ~ normal(0, 1);
+  omega ~ normal(0, 1);
+  tau   ~ normal(0, 2);
+  beta  ~ normal(0, 2);
+  sigma ~ normal(0, 1.5);
+
+  alpha[1] ~ normal(m0, s0);
+  for (s in 2:S) {
+    alpha[s] ~ normal(phi * alpha[s - 1], omega);
+  }
+
+  for (n in 1:N) {
+    y[n] ~ normal(alpha[study[n]] + tau * current[n] * A[n] + X[n] * beta, sigma);
+  }
+}
+generated quantities {
+  vector[Ncur] mu1;
+  vector[Ncur] mu0;
+  real muT;
+  real muC;
+  real Delta;
+
+  mu1 = alpha[S] + tau * rep_vector(1, Ncur) + Xcur * beta;
+  mu0 = alpha[S] + Xcur * beta;
+  muT = mean(mu1);
+  muC = mean(mu0);
+  Delta = muT - muC;
+}
+```
+
+This is the main Stan model for time-dependent borrowing.
+
+---
+
+## 16. Stan Code: Fixed Power Prior Model
+
+The simplest implementation uses a common intercept with weighted historical likelihood contributions. Below, `a_hist[h]` contains the fixed power weights.
+
+```stan
+data {
+  int<lower=1> N;
+  int<lower=1> P;
+  int<lower=1> H;
+  matrix[N, P] X;
+  vector[N] y;
+  array[N] int<lower=0, upper=1> current;
+  array[N] int<lower=0, upper=1> A;
+  array[N] int<lower=0, upper=H> hist_id; // 0 if current study, 1..H if historical
+  vector<lower=0, upper=1>[H] a_hist;
+}
+parameters {
+  real alpha;
+  real tau;
+  vector[P] beta;
+  real<lower=0> sigma;
+}
+model {
+  alpha ~ normal(0, 2);
+  tau   ~ normal(0, 2);
+  beta  ~ normal(0, 2);
+  sigma ~ normal(0, 1.5);
+
+  for (n in 1:N) {
+    if (current[n] == 1) {
+      target += normal_lpdf(y[n] | alpha + tau * A[n] + X[n] * beta, sigma);
+    } else {
+      target += a_hist[hist_id[n]] * normal_lpdf(y[n] | alpha + X[n] * beta, sigma);
+    }
+  }
+}
+```
+
+A more advanced version could allow study-specific intercepts together with weighted historical likelihoods.
+
+---
+
+## 17. R Simulation Skeleton Using cmdstanr
+
+```r
+library(cmdstanr)
+library(posterior)
+library(dplyr)
+
+simulate_one_dataset <- function(
+  n_hist = c(80, 80, 80, 80),
+  n_cur_c = 100,
+  n_cur_t = 100,
+  beta = c(0.6, -0.5, 0.4, -0.3),
+  tau = -0.3,
+  sigma = 1,
+  alpha = c(0, 0.15, 0.30, 0.45, 0.60)
+) {
+  make_x <- function(n) {
+    cbind(
+      x1 = rnorm(n),
+      x2 = rbinom(n, 1, 0.5),
+      x3 = rnorm(n),
+      x4 = rbinom(n, 1, 0.4)
+    )
+  }
+
+  dat_list <- list()
+
+  for (h in 1:4) {
+    Xh <- make_x(n_hist[h])
+    yh <- alpha[h] + Xh %*% beta + rnorm(n_hist[h], 0, sigma)
+    dat_list[[h]] <- data.frame(
+      study = h,
+      current = 0,
+      A = 0,
+      y = as.numeric(yh),
+      Xh
+    )
+  }
+
+  Xc0 <- make_x(n_cur_c)
+  yc0 <- alpha[5] + Xc0 %*% beta + rnorm(n_cur_c, 0, sigma)
+  d0 <- data.frame(study = 5, current = 1, A = 0, y = as.numeric(yc0), Xc0)
+
+  Xc1 <- make_x(n_cur_t)
+  yc1 <- alpha[5] + tau + Xc1 %*% beta + rnorm(n_cur_t, 0, sigma)
+  d1 <- data.frame(study = 5, current = 1, A = 1, y = as.numeric(yc1), Xc1)
+
+  dat <- bind_rows(dat_list, list(d0, d1))
+  dat
+}
+
+prepare_stan_data_ar1 <- function(dat) {
+  X <- as.matrix(dat[, c("x1", "x2", "x3", "x4")])
+  cur <- subset(dat, study == 5)
+  Xcur <- as.matrix(cur[, c("x1", "x2", "x3", "x4")])
+
+  list(
+    N = nrow(dat),
+    P = ncol(X),
+    S = length(unique(dat$study)),
+    Ncur = nrow(Xcur),
+    X = X,
+    y = dat$y,
+    study = dat$study,
+    current = dat$current,
+    A = dat$A,
+    Xcur = Xcur
+  )
+}
+
+extract_estimands <- function(fit) {
+  draws <- fit$draws(c("muT", "muC", "Delta"))
+  as_draws_df(draws)
+}
+```
+
+---
+
+## 18. Planned Output Tables and Figures
+
+The final simulation report should contain:
+
+1. A table summarizing all simulation scenarios.
+2. A table of true parameter values used for each scenario.
+3. Bias / RMSE / coverage tables for \(\mu_T\), \(\mu_C\), and \(\Delta\).
+4. A plot of empirical bias against drift severity.
+5. A plot of interval width against drift severity.
+6. Power and type I error plots by method.
+7. Posterior mean trajectories of study intercepts under the AR(1) model.
+
+---
+
+## 19. Interpretation Strategy
+
+The interpretation should emphasize:
+
+- whether explicit time modeling protects against drift-induced bias,
+- when full borrowing is efficient but unsafe,
+- whether exchangeable hierarchical priors are sufficiently robust when drift exists,
+- how much efficiency is gained relative to no borrowing,
+- and whether posterior g-computation recovers the marginal estimand under covariate imbalance.
+
+---
+
+## 20. Recommended Primary Analysis for the Thesis
+
+For the main thesis simulation, a strong primary design would be:
+
+- 4 historical studies plus 1 current trial,
+- covariate-adjusted Gaussian outcome model,
+- estimands \(\mu_T\), \(\mu_C\), and \(\Delta\) for the current population,
+- methods compared: no borrowing, full borrowing, hierarchical prior, AR(1) prior, and power prior,
+- primary drift scenarios: none, linear drift, and AR(1) drift,
+- main treatment settings: \(\tau=0\) and \(\tau=-0.3\).
+
+This provides a clean framework that is aligned with the methodological contribution of time-dependent borrowing.
+
+---
+
+## 21. Next Extension
+
+A natural next extension is to allow the regression coefficients for the measured covariates to be common across studies while permitting the intercept to vary over time. This separates:
+
+- **measured prognostic adjustment** through \(X^\top\beta\), and
+- **unmeasured temporal change** through the evolving intercept \(\alpha_j\).
+
+This is exactly the structure needed to represent evolving standard of care or other unmeasured secular changes.
+
+---
+
+## 22. Short Thesis-Style Summary Paragraph
+
+The simulation study will evaluate Bayesian borrowing methods for continuous outcomes in randomized trials with multiple historical control datasets. Patient-level covariates will be incorporated through an outcome regression model, and the target estimands will be the marginal treatment and control means, together with the marginal treatment effect, in the current trial population. Historical and current control information will be linked through alternative prior structures, including exchangeable hierarchical priors, power priors, and a time-dependent AR(1) prior on study-specific control intercepts. Simulation scenarios will vary the degree of temporal drift, treatment effect size, sample size, and covariate shift, and performance will be assessed using bias, RMSE, interval coverage, interval width, power, and type I error. The primary objective is to determine whether explicit modeling of temporal dependence improves robustness and efficiency when borrowing from historical controls.
+
+
