@@ -1,38 +1,36 @@
 data {
-  int<lower=1> N;
-  int<lower=1> J;
-  array[N] int<lower=1, upper=J> trial; 
-  vector[N] y;
-  vector[N] x;        // centered baseline covariate
+  int<lower=1> H;                 // number of historical studies
+  vector[H] ybar;                 // observed historical means
+  vector<lower=0>[H] se;          // standard errors of historical means
 }
 
 parameters {
-  real mu_alpha;
-  real<lower=0> tau_alpha;
-
-  vector[J] alpha;
-  real gamma;
-  real<lower=0> sigma;
+  vector[H] theta;                // latent historical study means
+  real mu;                        // overall mean
+  real<lower=0> tau;              // between-study SD
 }
 
 model {
   // Hyperpriors
-  mu_alpha ~ normal(0, 10);
-  tau_alpha ~ cauchy(0, 2.5);
-  gamma ~ normal(0, 5);
-  sigma ~ cauchy(0, 2.5);
+  mu ~ normal(0, 10);
+  tau ~ normal(0, 5);             // half-normal because tau > 0
 
-  // Hierarchical prior
-  alpha ~ normal(mu_alpha, tau_alpha);
+  // Exchangeable MAP prior
+  theta ~ normal(mu, tau);
 
-  // Likelihood
-  // FIX 2: Use '*' for scalar (gamma) times vector (x)
-  // alpha[trial] now works because trial is an integer array
-  y ~ normal(alpha[trial] + gamma * x, sigma);
+  // Historical likelihood
+  ybar ~ normal(theta, se);
 }
 
 generated quantities {
-  real alpha_new;
-  alpha_new = normal_rng(mu_alpha, tau_alpha);
+  vector[H] log_lik;
+  real theta_star;                // predictive current control mean
+
+  for (h in 1:H) {
+    log_lik[h] = normal_lpdf(ybar[h] | theta[h], se[h]);
+  }
+
+  // MAP predictive prior for current control
+  theta_star = normal_rng(mu, tau);
 }
 

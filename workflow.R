@@ -63,7 +63,7 @@ s0sq  <- sigma2 / n0     # sampling variance
 # ── 1a. Compile model ─────────────────────────────────────────────────────────
 cat("\n[Step 1] Compiling AR(1) non-stationary predictive prior model...\n")
 mod_pred <- cmdstan_model(
-  "ar1ns_predictive_prior.stan",
+  "ar1map.stan",
   cpp_options = list(stan_threads = TRUE)   # optional: within-chain parallelism
 )
 
